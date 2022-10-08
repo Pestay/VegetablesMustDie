@@ -9,7 +9,6 @@ radius = 32.0156
 
 [node name="Enemy" type="KinematicBody2D"]
 script = ExtResource( 1 )
-test_target = Vector2( 800, 400 )
 
 [node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 2 )

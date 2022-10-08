@@ -70,7 +70,7 @@ public class EnemyFSM : Node
     protected virtual void DoAction(float delta, STATES state){ 
         switch(state){
             case STATES.WALK:
-                parent.MoveToCurrentTarget(delta);
+                parent.FollowPath(delta);
                 break;
         }
     }
