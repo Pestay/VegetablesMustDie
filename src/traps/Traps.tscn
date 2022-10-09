@@ -1,0 +1,11 @@
+[gd_scene format=2]
+
+[node name="Traps" type="Node2D"]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+visible = false
+
+[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer"]
+margin_right = 152.0
+margin_bottom = 36.0
+text = "building mode"
