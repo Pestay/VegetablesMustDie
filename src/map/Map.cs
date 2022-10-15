@@ -42,5 +42,13 @@ public class Map : Node2D{
         return map_matrix;
     }
 
+    public void SetNewBlock(Vector2 tile_pos, int block_weight){
+        GD.Print("Set!!");
+        map_matrix[(int) tile_pos.y, (int) tile_pos.x] = block_weight;
+    }
+
+
+    public TileMap GetTileMap() => tile_map;
+
 
 }

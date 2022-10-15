@@ -34,7 +34,7 @@ public class Enemy : KinematicBody2D{
         IDLE_ANIMATION = ResourceLoader.Load<Texture>("res://src/enemies/enemy_idle.png");
 
         // DEBUG
-        TestPositions test_path = GetParent().GetParent().GetNode<TestPositions>("TestPositions");
+        //TestPositions test_path = GetParent().GetParent().GetNode<TestPositions>("TestPositions");
         Map map = GetTree().Root.GetNode("Game").GetNode<Map>("Map");
         Goal goal = GetTree().Root.GetNode("Game").GetNode<Goal>("Goal");
 
@@ -44,8 +44,8 @@ public class Enemy : KinematicBody2D{
         
         GD.Print("Entering Find Path");
         FindPath(cells, tile_map.WorldToMap(goal.initial_pos));
-        GD.Print(tile_map.WorldToMap(goal.initial_pos));
-        GD.Print(goal.initial_pos);
+        //GD.Print(tile_map.WorldToMap(goal.initial_pos));
+        //GD.Print(goal.initial_pos);
         SetPath(best_path);
     }
 
