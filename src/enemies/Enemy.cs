@@ -43,7 +43,7 @@ public class Enemy : KinematicBody2D{
         tile_map = (TileMap) map.Get("tile_map");
         
         GD.Print("Entering Find Path");
-        FindPath(cells, tile_map.WorldToMap(goal.initial_pos));
+        best_path = FindPath(tile_map.WorldToMap(this.GlobalPosition), tile_map.WorldToMap(goal.initial_pos), cells);
         //GD.Print(tile_map.WorldToMap(goal.initial_pos));
         //GD.Print(goal.initial_pos);
         SetPath(best_path);
@@ -99,9 +99,8 @@ public class Enemy : KinematicBody2D{
         return h;
     }
 
-    public void FindPath(int[,] cells, Vector2 goal){
+    public List<Vector2> FindPath(Vector2 initial_pos, Vector2 goal, int[,] cells){
 
-        Vector2 initial_pos = tile_map.WorldToMap(this.GlobalPosition);
         Vector2 current;
         int min = 1000000000;
         Vector2 key = new Vector2(-1,-1);
@@ -146,8 +145,7 @@ public class Enemy : KinematicBody2D{
             
             if (current == goal)
             {
-                reconstruct_path(cameFrom,current);
-                return;
+                return reconstruct_path(cameFrom,current);
             }
                  
             openSet.Remove(current);
@@ -177,11 +175,12 @@ public class Enemy : KinematicBody2D{
                 }
             }
         }
+        List<Vector2> errList = new List<Vector2>();
         GD.Print("ERROR");
-        return;
+        return errList;
     }
 
-    private void reconstruct_path(Dictionary<Vector2,Vector2> cameFrom, Vector2 current)
+    private List<Vector2> reconstruct_path(Dictionary<Vector2,Vector2> cameFrom, Vector2 current)
     {
         List<Vector2> total_path = new List<Vector2>();
 
@@ -192,8 +191,8 @@ public class Enemy : KinematicBody2D{
             // SE SUMA EL OFFSET
             total_path.Insert(0,tile_map.MapToWorld(current)+new Vector2(32,32));
         }
-        best_path = total_path;
-        return;
+        
+        return total_path;
     }
 
     private List<Vector2> Neighbours(Vector2 n)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://src/map/Map.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/enemies/Enemy.tscn" type="PackedScene" id=2]
@@ -10,6 +10,7 @@
 [ext_resource path="res://src/traps/Traps.cs" type="Script" id=8]
 [ext_resource path="res://src/game/Goal.cs" type="Script" id=9]
 [ext_resource path="res://src/game/DebugLine.cs" type="Script" id=10]
+[ext_resource path="res://src/player/Player.tscn" type="PackedScene" id=11]
 
 [node name="Game" type="Node2D"]
 script = ExtResource( 3 )
@@ -90,3 +91,5 @@ script = ExtResource( 6 )
 
 [node name="Line2D" type="Line2D" parent="."]
 script = ExtResource( 10 )
+
+[node name="Player" parent="." instance=ExtResource( 11 )]
