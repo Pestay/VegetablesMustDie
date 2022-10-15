@@ -19,6 +19,9 @@ public class Enemy : KinematicBody2D{
     Sprite enemy_sprite;
 
     TileMap tile_map;
+    
+    Map map;
+    Goal goal;
 
     int[,] cells;
 
@@ -35,22 +38,21 @@ public class Enemy : KinematicBody2D{
 
         // DEBUG
         //TestPositions test_path = GetParent().GetParent().GetNode<TestPositions>("TestPositions");
-        Map map = GetTree().Root.GetNode("Game").GetNode<Map>("Map");
-        Goal goal = GetTree().Root.GetNode("Game").GetNode<Goal>("Goal");
+        map = GetTree().Root.GetNode("Game").GetNode<Map>("Map");
+        goal = GetTree().Root.GetNode("Game").GetNode<Goal>("Goal");
 
-        cells = map.GetMatrixMap();
 
         tile_map = (TileMap) map.Get("tile_map");
-        
-        GD.Print("Entering Find Path");
-        best_path = FindPath(tile_map.WorldToMap(this.GlobalPosition), tile_map.WorldToMap(goal.initial_pos), cells);
+
         //GD.Print(tile_map.WorldToMap(goal.initial_pos));
         //GD.Print(goal.initial_pos);
-        SetPath(best_path);
+        
     }
 
     public override void _PhysicsProcess(float delta){
         base._PhysicsProcess(delta);
+        if(Input.IsActionJustPressed("ui_accept"))
+            DebugPath();
         brain.UpdateFSM(delta);
     }
 
@@ -166,7 +168,7 @@ public class Enemy : KinematicBody2D{
                     fScore[neighbour] = tentative_gScore + getH(neighbour, goal);
                     
                     
-                    if (!openSet.Contains(neighbour) && (tile_map.GetCellv(neighbour) == 1))
+                    if (!openSet.Contains(neighbour) && (cells[(int)neighbour.y,(int)neighbour.x]== 1))
                     {
                         openSet.Add(neighbour);
                     }
@@ -228,5 +230,12 @@ public class Enemy : KinematicBody2D{
         current_path = new_path;
     }
 
+
+    public void DebugPath(){
+            cells = map.GetMatrixMap();
+            best_path = FindPath(tile_map.WorldToMap( this.GlobalPosition), tile_map.WorldToMap(goal.initial_pos), cells);
+            SetPath(best_path);
+    }
+        
 }
 
