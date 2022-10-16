@@ -33,7 +33,7 @@ public class Map : Node2D{
         
         spawn = GetTree().Root.GetNode("Game").GetNode("Spawns").GetNode<Node2D>("Spawn 1");
         cells = GetMatrixMap();
-        best_path = FindPath(tile_map.WorldToMap( spawn.GlobalPosition), tile_map.WorldToMap(goal.initial_pos), cells);
+        best_path = FindPath(tile_map.WorldToMap( spawn.GlobalPosition), tile_map.WorldToMap(goal.initial_pos), cells).Item1;
         //DebugUtils.Print2DArray(map_matrix);
     }
 
@@ -71,7 +71,7 @@ public class Map : Node2D{
         map_matrix[(int) tile_pos.y, (int) tile_pos.x] = block_weight;
         foreach(Enemy enemy in enemies)
         {
-            enemy.SetPath(FindPath(tile_map.WorldToMap(enemy.GlobalPosition), tile_map.WorldToMap(goal.initial_pos), cells));
+            enemy.SetPath(FindPath(tile_map.WorldToMap(enemy.GlobalPosition), tile_map.WorldToMap(goal.initial_pos), cells).Item1);
         }
     }
 
@@ -84,8 +84,8 @@ public class Map : Node2D{
         return h;
     }
 
-    public List<Vector2> FindPath(Vector2 initial_pos, Vector2 goal, int[,] cells){
-
+    public Tuple<List<Vector2>, bool> FindPath(Vector2 initial_pos, Vector2 goal, int[,] cells){
+        bool blocked = false;
         Vector2 current;
         int min = 1000000000;
         Vector2 key = new Vector2(-1,-1);
@@ -158,6 +158,8 @@ public class Map : Node2D{
                     if (!openSet.Contains(neighbour) && (cells[(int)neighbour.y,(int)neighbour.x] != 0))
                     {
                         openSet.Add(neighbour);
+                        if (cells[(int)neighbour.y,(int)neighbour.x] == 10)
+                            blocked = true;
                     }
                     
 
@@ -166,22 +168,25 @@ public class Map : Node2D{
         }
         List<Vector2> errList = new List<Vector2>();
         GD.Print("ERROR");
-        return errList;
+        return Tuple.Create(errList,blocked);
     }
 
-    private List<Vector2> reconstruct_path(Dictionary<Vector2,Vector2> cameFrom, Vector2 current)
+    private Tuple<List<Vector2>, bool> reconstruct_path(Dictionary<Vector2,Vector2> cameFrom, Vector2 current)
     {
+        bool blocked = false;
         List<Vector2> total_path = new List<Vector2>();
 
         total_path.Add(tile_map.MapToWorld(current));
         while (cameFrom.Keys.Contains(current))
         {
+            if (cells[(int)current.y,(int)current.x] == 10)
+                blocked = true;
             current = cameFrom[current];
+            
             // SE SUMA EL OFFSET
             total_path.Insert(0,tile_map.MapToWorld(current)+new Vector2(32,32));
         }
-        
-        return total_path;
+        return Tuple.Create(total_path,blocked);
     }
 
     private List<Vector2> Neighbours(Vector2 n)
