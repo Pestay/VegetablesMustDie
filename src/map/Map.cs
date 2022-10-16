@@ -70,7 +70,9 @@ public class Map : Node2D{
         GD.Print("Set!!");
         map_matrix[(int) tile_pos.y, (int) tile_pos.x] = block_weight;
         foreach(Enemy enemy in enemies)
+        {
             enemy.SetPath(FindPath(tile_map.WorldToMap(enemy.GlobalPosition), tile_map.WorldToMap(goal.initial_pos), cells));
+        }
     }
 
 
@@ -134,7 +136,11 @@ public class Map : Node2D{
             openSet.Remove(current);
             foreach (Vector2 neighbour in Neighbours(current))
             {
-                int tentative_gScore = gScore[current] + 1;
+                int tentative_gScore;
+                if(cells[(int)neighbour.y,(int)neighbour.x] == 1)
+                    tentative_gScore = gScore[current] + 1;
+                else
+                    tentative_gScore = gScore[current] + 100;
                 
                 if (!gScore.ContainsKey(neighbour))
                 {
@@ -149,7 +155,7 @@ public class Map : Node2D{
                     fScore[neighbour] = tentative_gScore + getH(neighbour, goal);
                     
                     
-                    if (!openSet.Contains(neighbour) && (cells[(int)neighbour.y,(int)neighbour.x]== 1))
+                    if (!openSet.Contains(neighbour) && (cells[(int)neighbour.y,(int)neighbour.x] != 0))
                     {
                         openSet.Add(neighbour);
                     }

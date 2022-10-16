@@ -28,8 +28,12 @@ position = Vector2( 97, 129 )
 
 [node name="Enemies" type="Node2D" parent="."]
 
-[node name="Enemy" parent="Enemies" groups=["Enemy"] instance=ExtResource( 2 )]
+[node name="Enemy2" parent="Enemies" instance=ExtResource( 2 )]
 position = Vector2( 293, 144 )
+scale = Vector2( 0.5, 0.5 )
+
+[node name="Enemy" parent="Enemies" groups=["Enemy"] instance=ExtResource( 2 )]
+position = Vector2( 191, 150 )
 scale = Vector2( 0.5, 0.5 )
 
 [node name="TestPositions" type="Node2D" parent="."]
