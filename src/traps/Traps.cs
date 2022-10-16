@@ -14,7 +14,7 @@ public class Traps : Node2D{
     Map MAP;
 
     TrapPreview current_trap = null;
-    bool in_building = false;
+    public bool in_building = false;
 
 
     public override void _Ready(){

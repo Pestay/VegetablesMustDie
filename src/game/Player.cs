@@ -12,13 +12,15 @@ public class Player : KinematicBody2D
 
     Sprite player_sprite;
 
-    PackedScene bulletScene;
+    bool trapsState;
 
+    PackedScene bulletScene;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
         bulletScene = GD.Load<PackedScene>("res://src/entities/Bullet.tscn");
+        
         player_sprite = GetNode<Sprite>("Sprite");
         WALK_ANIMATION = ResourceLoader.Load<Texture>("res://src/enemies/enemy_walk.png");
         IDLE_ANIMATION = ResourceLoader.Load<Texture>("res://src/enemies/enemy_idle.png");
@@ -54,12 +56,13 @@ public class Player : KinematicBody2D
     public override void _PhysicsProcess(float delta)
     {
         GetInput();
+        trapsState = GetTree().Root.GetNode<Traps>("Game/Traps").in_building;
         velocity = MoveAndSlide(velocity);
     }
 
     public override void _UnhandledInput(InputEvent @event)
     {
-        if(@event is InputEventMouseButton mouseEvent) 
+        if(@event is InputEventMouseButton mouseEvent && !trapsState) 
         {
             if (mouseEvent.ButtonIndex == (int)ButtonList.Left && mouseEvent.Pressed)
             {

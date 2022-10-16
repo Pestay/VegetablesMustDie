@@ -19,6 +19,11 @@ script = ExtResource( 3 )
 position = Vector2( 231, 1473 )
 script = ExtResource( 9 )
 
+[node name="Spawns" type="Node2D" parent="."]
+
+[node name="Spawn 1" type="Node2D" parent="Spawns"]
+position = Vector2( 97, 129 )
+
 [node name="Map" parent="." instance=ExtResource( 1 )]
 
 [node name="Enemies" type="Node2D" parent="."]
