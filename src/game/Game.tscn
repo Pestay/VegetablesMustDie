@@ -21,9 +21,9 @@ script = ExtResource( 8 )
 script = ExtResource( 2 )
 
 [node name="FreeViewCamera" parent="." instance=ExtResource( 5 )]
-current = true
+position = Vector2( 1174, 1092 )
 script = ExtResource( 6 )
 
 [node name="Player" parent="." instance=ExtResource( 11 )]
-position = Vector2( 844, 1465 )
+position = Vector2( 1166, 1263 )
 speed = 300

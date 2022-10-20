@@ -10,12 +10,12 @@ public class Enemy : KinematicBody2D{
 
     Texture WALK_ANIMATION;
     Texture IDLE_ANIMATION;
-
+    AnimationPlayer ANIMATIONS;
     [Export]
     List<Vector2> current_path = new List<Vector2>();
 
     Vector2 velocity = Vector2.Zero;
-    float max_speed = 12000;
+    float max_speed = 100;
     Sprite enemy_sprite;
 
     TileMap tile_map;
@@ -31,10 +31,10 @@ public class Enemy : KinematicBody2D{
     public override void _Ready(){
         enemy_sprite = GetNode<Sprite>("Sprite");
         brain = GetNode<EnemyFSM>("EnemyFSM");
-
+        ANIMATIONS = GetNode<AnimationPlayer>("AnimationPlayer");
         WALK_ANIMATION = ResourceLoader.Load<Texture>("res://src/enemies/enemy_walk.png");
         IDLE_ANIMATION = ResourceLoader.Load<Texture>("res://src/enemies/enemy_idle.png");
-
+        
         // DEBUG
         //TestPositions test_path = GetParent().GetParent().GetNode<TestPositions>("TestPositions");
         map = GetTree().Root.GetNode("Game").GetNode<Map>("Map");
@@ -48,9 +48,10 @@ public class Enemy : KinematicBody2D{
      // Constantly move linearly to the position
     void MoveTo(float delta, Vector2 destination){
         Vector2 to_pos = (destination - this.GlobalPosition).Normalized();
-        Vector2 new_velocity = to_pos*delta*max_speed;
+        Vector2 new_velocity = to_pos*max_speed;
         velocity = new_velocity;
         velocity = this.MoveAndSlide(velocity);
+
     }
 
     // --- Actions
@@ -69,11 +70,15 @@ public class Enemy : KinematicBody2D{
     }
 
     public void IdleAnimation(){
-        enemy_sprite.Texture = IDLE_ANIMATION;
+        if(ANIMATIONS.IsPlaying())
+            ANIMATIONS.Stop();
+        enemy_sprite.Frame = 0;
     }
 
     public void WalkAnimation(){
-        enemy_sprite.Texture = WALK_ANIMATION;
+        if(!ANIMATIONS.IsPlaying())
+            ANIMATIONS.Play("walk");
+        //enemy_sprite.Texture = WALK_ANIMATION;
     }
     
 
