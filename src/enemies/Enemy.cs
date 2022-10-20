@@ -21,7 +21,6 @@ public class Enemy : KinematicBody2D{
     TileMap tile_map;
     
     Map map;
-    Goal goal;
 
     int[,] cells;
 
@@ -39,15 +38,6 @@ public class Enemy : KinematicBody2D{
         // DEBUG
         //TestPositions test_path = GetParent().GetParent().GetNode<TestPositions>("TestPositions");
         map = GetTree().Root.GetNode("Game").GetNode<Map>("Map");
-        goal = GetTree().Root.GetNode("Game").GetNode<Goal>("Goal");
-
-
-        SetPath(map.best_path);
-        
-
-        //GD.Print(tile_map.WorldToMap(goal.initial_pos));
-        //GD.Print(goal.initial_pos);
-        
     }
 
     public override void _PhysicsProcess(float delta){
