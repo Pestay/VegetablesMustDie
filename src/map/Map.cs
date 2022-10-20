@@ -10,6 +10,7 @@ public class Map : Node2D{
     Position2D ENEMY_GOAL;
     Dictionary<int, Vector2> ENEMIES_GATES = new Dictionary<int, Vector2>();
     Position2D PLAYER_SPAWN;
+    PathFinding PATH_FINDING;
     
     int[,] map_matrix;
 
@@ -17,6 +18,7 @@ public class Map : Node2D{
         TILE_MAP = GetNode<TileMap>("TileMap");
         ENEMY_GOAL = GetNode<Position2D>("Goal");
         PLAYER_SPAWN =GetNode<Position2D>("PlayerSpawn");
+        PATH_FINDING = GetNode<PathFinding>("PathFinding");
 
         int loop = 0;
         foreach( Position2D spawn in GetNode<Node2D>("Gates").GetChildren()){
@@ -65,5 +67,17 @@ public class Map : Node2D{
     public Position2D GetPlayerSpawn() => PLAYER_SPAWN;
 
     public TileMap GetTileMap() => TILE_MAP;
+
+
+    public Tuple<List<Vector2>, bool> GetPathToGoal(Vector2 from){
+        Tuple<List<Vector2>, bool> result = PATH_FINDING.FindPath( TILE_MAP.WorldToMap(from), TILE_MAP.WorldToMap(ENEMY_GOAL.GlobalPosition), map_matrix);
+        // Convert path local coordinates to global coordinates
+        List<Vector2> path = new List<Vector2>();
+        foreach(Vector2 coord in result.Item1){
+            path.Add( TILE_MAP.MapToWorld(coord) + new Vector2(32,32));
+        }
+        return new Tuple<List<Vector2>, bool>(path, result.Item2);
+    }
+
 
 }

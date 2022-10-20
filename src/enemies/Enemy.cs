@@ -84,8 +84,8 @@ public class Enemy : KinematicBody2D{
         }
         return false;
     }
-    // Setters and Getters
 
+    // Setters and Getters
     public void SetPath(List<Vector2> new_path){
         current_path = new_path;
     }

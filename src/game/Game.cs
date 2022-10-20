@@ -65,8 +65,4 @@ public class Game : Node2D{
         ENEMIES.SpawnEnemyGroup(wave.wave_enemies, spawn_pos);
     }
 
-
-
-
-
 }
