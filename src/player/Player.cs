@@ -1,16 +1,17 @@
 using Godot;
 using System;
 
-public class Player : KinematicBody2D
-{
-    Texture WALK_ANIMATION;
-    Texture IDLE_ANIMATION;
+public class Player : KinematicBody2D{
+
+
+    AnimationPlayer ANIMATIONS;
+    PlayerFSM BRAIN;
 
     [Export] public int speed = 200;
 
     public Vector2 velocity = new Vector2();
 
-    Sprite player_sprite;
+    Sprite PLAYER_SPRITE;
 
     bool trapsState;
 
@@ -21,28 +22,41 @@ public class Player : KinematicBody2D
     {
         bulletScene = GD.Load<PackedScene>("res://src/entities/Bullet.tscn");
         
-        player_sprite = GetNode<Sprite>("Sprite");
-        WALK_ANIMATION = ResourceLoader.Load<Texture>("res://src/enemies/enemy_walk.png");
-        IDLE_ANIMATION = ResourceLoader.Load<Texture>("res://src/enemies/enemy_idle.png");
+        PLAYER_SPRITE = GetNode<Sprite>("Sprite");
+
+        ANIMATIONS = GetNode<AnimationPlayer>("AnimationPlayer");
+        BRAIN = GetNode<PlayerFSM>("PlayerFSM");
     }
 
     public void IdleAnimation(){
-        player_sprite.Texture = IDLE_ANIMATION;
+        if(ANIMATIONS.IsPlaying() ){
+            ANIMATIONS.Stop();
+        }
+        ANIMATIONS.Play("Idle");
     }
 
     public void WalkAnimation(){
-        player_sprite.Texture = WALK_ANIMATION;
+        if(ANIMATIONS.IsPlaying()){
+            ANIMATIONS.Stop();
+        }
+        ANIMATIONS.Play("Walk");
     }
 
-    public void GetInput()
-    {
+    
+    public void GetInput(){
         velocity = new Vector2();
 
-        if (Input.IsActionPressed("right"))
+        if (Input.IsActionPressed("right")){
             velocity.x += 1;
+            PLAYER_SPRITE.FlipH = false;
+        }
+            
 
-        if (Input.IsActionPressed("left"))
+        if (Input.IsActionPressed("left")){
             velocity.x -= 1;
+            PLAYER_SPRITE.FlipH = true;
+        }
+            
 
         if (Input.IsActionPressed("down"))
             velocity.y += 1;
@@ -55,6 +69,7 @@ public class Player : KinematicBody2D
 
     public override void _PhysicsProcess(float delta)
     {
+        BRAIN.UpdateFSM();
         GetInput();
         trapsState = GetTree().Root.GetNode<Traps>("Game/Traps").in_building;
         velocity = MoveAndSlide(velocity);
@@ -75,5 +90,7 @@ public class Player : KinematicBody2D
             }
         }
     }
+
+    public Vector2 GetVelocity() => velocity;
 
 }
