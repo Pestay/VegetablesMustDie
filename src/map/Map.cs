@@ -28,7 +28,6 @@ public class Map : Node2D{
         
 
         map_matrix = CreateMatrixMap();
-        DebugUtils.Print2DArray(map_matrix);
     }
 
     // Create 2D array map filled with tile ids
@@ -50,10 +49,7 @@ public class Map : Node2D{
             int x = (int) (tile_cell.x - map_offset.x);
             int y = (int) (tile_cell.y - map_offset.y);
             map_array[y,x] = TILE_MAP.GetCell((int) tile_cell.x,(int) tile_cell.y);
-
-            if(map_array[y,x] == 3){
-                map_array[y,x] = 1;
-            }
+            
 
         }
 
@@ -76,12 +72,6 @@ public class Map : Node2D{
 
 
     public Tuple<List<Vector2>, bool> GetPathToGoal(Vector2 from){
-        Vector2 destino = TILE_MAP.WorldToMap(ENEMY_GOAL.GlobalPosition);
-        Vector2 origen = TILE_MAP.WorldToMap(from);
-        GD.Print("El tile en el origen es:", TILE_MAP.GetCell((int) origen.x, (int) origen.y) , ", matriz: ",map_matrix[(int) origen.y, (int) origen.x] );
-        //GD.Print("de prueba", TILE_MAP.GetCell(  (int) 5454, (int) 341)  );
-        GD.Print("La tile en la meta es:", TILE_MAP.GetCell((int) destino.x, (int) destino.y), ", matriz: ", map_matrix[(int) destino.x, (int) destino.y]  );
-
         Tuple<List<Vector2>, bool> result = PATH_FINDING.FindPath( TILE_MAP.WorldToMap(from), TILE_MAP.WorldToMap(ENEMY_GOAL.GlobalPosition), map_matrix);
         
         // Convert  local coordinates to global coordinates
@@ -91,7 +81,6 @@ public class Map : Node2D{
         }
         
         Tuple<List<Vector2>, bool> data = new Tuple<List<Vector2>, bool>(path, result.Item2);
-        GD.Print("path length is ", data.Item1.Count);
         return data;
     }
 

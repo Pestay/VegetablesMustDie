@@ -15,7 +15,7 @@ public class Enemy : KinematicBody2D{
     List<Vector2> current_path = new List<Vector2>();
 
     Vector2 velocity = Vector2.Zero;
-    float max_speed = 100;
+    float max_speed = 50;
     Sprite enemy_sprite;
 
     Health_bar health_bar;

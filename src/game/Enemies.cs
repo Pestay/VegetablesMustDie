@@ -32,7 +32,7 @@ public class Enemies : Node2D{
         foreach(PackedScene enemy in enemies){
             Enemy new_enemy = (Enemy) SpawnEnemy(initial_pos ,enemy);
             new_enemy.SetPath(GAME_MAP.GetPathToGoal(new_enemy.GlobalPosition).Item1);
-            await ToSignal(GetTree().CreateTimer(0.5f), "timeout");
+            await ToSignal(GetTree().CreateTimer(0.2f), "timeout");
         }
     }
     
