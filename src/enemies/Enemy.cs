@@ -8,8 +8,6 @@ using System.Text;
 public class Enemy : KinematicBody2D{
 
 
-    Texture WALK_ANIMATION;
-    Texture IDLE_ANIMATION;
     AnimationPlayer ANIMATIONS;
     [Export]
     List<Vector2> current_path = new List<Vector2>();
@@ -18,9 +16,9 @@ public class Enemy : KinematicBody2D{
     float max_speed = 50;
     Sprite enemy_sprite;
 
-    Health_bar health_bar;
+    HealthBar HEALTH_BAR;
 
-    public int health = 50;
+    float health = 100;
 
     TileMap tile_map;
     
@@ -36,18 +34,8 @@ public class Enemy : KinematicBody2D{
         enemy_sprite = GetNode<Sprite>("Sprite");
         brain = GetNode<EnemyFSM>("EnemyFSM");
         ANIMATIONS = GetNode<AnimationPlayer>("AnimationPlayer");
-        WALK_ANIMATION = ResourceLoader.Load<Texture>("res://src/enemies/enemy_walk.png");
-        IDLE_ANIMATION = ResourceLoader.Load<Texture>("res://src/enemies/enemy_idle.png");
-
-        PackedScene health_scene = GD.Load<PackedScene>("res://src/entities/Health bar.tscn");
-
-        health_bar = (Health_bar) health_scene.Instance();
-
-        health_bar.Position = this.Position + new Vector2(0, -42);
-
-        GetParent().AddChild(health_bar);
-
-        health_bar.setMaxValue(health);
+        HEALTH_BAR = GetNode<HealthBar>("HealthBar");
+        HEALTH_BAR.SetMaxValue(health);
         
         // DEBUG
         //TestPositions test_path = GetParent().GetParent().GetNode<TestPositions>("TestPositions");
@@ -57,8 +45,6 @@ public class Enemy : KinematicBody2D{
     public override void _PhysicsProcess(float delta){
         base._PhysicsProcess(delta);
         brain.UpdateFSM(delta);
-        health_bar.setValue(health);
-        health_bar.Position = this.Position + new Vector2(0, -42);
     }
 
      // Constantly move linearly to the position
@@ -104,6 +90,15 @@ public class Enemy : KinematicBody2D{
             return true;
         }
         return false;
+    }
+
+
+    public void TakeDamage(float dmg){
+        health -= dmg;
+        HEALTH_BAR.SetValue(health);
+        if(health <= 0){
+            QueueFree();
+        }
     }
 
     // Setters and Getters

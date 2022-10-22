@@ -27,8 +27,10 @@ public class Bullet : Node2D
     private void OnCollision(Node with) {
         if(with.IsInGroup("Player"))
             return;
-        else if(with.IsInGroup("Enemy"))
-            with.QueueFree();
+        else if(with.IsInGroup("Enemy")){
+            Enemy enemy = (Enemy) with;
+            enemy.TakeDamage(10.0f);
+        }
         QueueFree();
     }
 }
