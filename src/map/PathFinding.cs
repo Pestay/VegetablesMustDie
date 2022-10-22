@@ -24,18 +24,7 @@ public class PathFinding : Node{
 
         var fScore = new Dictionary<Vector2, int>();
         fScore[initial_pos] = getH(initial_pos, goal);
-        /*
-        foreach(var tile_pos in tile_map.GetUsedCells())
-        {
-            if(!fScore.ContainsKey((Vector2) tile_pos))
-                fScore[(Vector2) tile_pos] = 1000000;
-                
-                
 
-            if(!gScore.ContainsKey((Vector2) tile_pos))
-                gScore[(Vector2) tile_pos] = 1000000;
-        }
-        */
         for (int i = 0; i < cells.GetLength(0); i++)
         {
 
@@ -76,7 +65,7 @@ public class PathFinding : Node{
             foreach (Vector2 neighbour in Neighbours(current, cells))
             {
                 int tentative_gScore;
-                if(cells[(int)neighbour.y,(int)neighbour.x] == 1)
+                if(cells[(int)neighbour.y,(int)neighbour.x] == 0)
                     tentative_gScore = gScore[current] + 1;
                 else
                     tentative_gScore = gScore[current] + 100;
@@ -94,7 +83,7 @@ public class PathFinding : Node{
                     fScore[neighbour] = tentative_gScore + getH(neighbour, goal);
                     
                     
-                    if (!openSet.Contains(neighbour) && (cells[(int)neighbour.y,(int)neighbour.x] != 0))
+                    if (!openSet.Contains(neighbour) && (cells[(int)neighbour.y,(int)neighbour.x] != 3))
                     {
                         openSet.Add(neighbour);
                         if (cells[(int)neighbour.y,(int)neighbour.x] == 10)
@@ -105,6 +94,7 @@ public class PathFinding : Node{
                 }
             }
         }
+        GD.Print("PATH NOT FOUNDD");
         List<Vector2> errList = new List<Vector2>();
         return Tuple.Create(errList, blocked);
     }

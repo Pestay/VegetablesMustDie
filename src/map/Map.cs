@@ -49,6 +49,8 @@ public class Map : Node2D{
             int x = (int) (tile_cell.x - map_offset.x);
             int y = (int) (tile_cell.y - map_offset.y);
             map_array[y,x] = TILE_MAP.GetCell((int) tile_cell.x,(int) tile_cell.y);
+            
+
         }
 
     return map_array;
@@ -71,12 +73,15 @@ public class Map : Node2D{
 
     public Tuple<List<Vector2>, bool> GetPathToGoal(Vector2 from){
         Tuple<List<Vector2>, bool> result = PATH_FINDING.FindPath( TILE_MAP.WorldToMap(from), TILE_MAP.WorldToMap(ENEMY_GOAL.GlobalPosition), map_matrix);
-        // Convert path local coordinates to global coordinates
+        
+        // Convert  local coordinates to global coordinates
         List<Vector2> path = new List<Vector2>();
         foreach(Vector2 coord in result.Item1){
-            path.Add( TILE_MAP.MapToWorld(coord) + new Vector2(32,32));
+            path.Add( TILE_MAP.MapToWorld(coord) + new Vector2(16,16)); // Map tile + Medium tile offset
         }
-        return new Tuple<List<Vector2>, bool>(path, result.Item2);
+        
+        Tuple<List<Vector2>, bool> data = new Tuple<List<Vector2>, bool>(path, result.Item2);
+        return data;
     }
 
 

@@ -28,22 +28,12 @@ public class Enemies : Node2D{
     }
 
 
-    public void SpawnEnemyGroup(List<PackedScene> enemies, Vector2 initial_pos){
-        uint enemies_in_col = 3; //The number of enemies in a column
-        uint count = 0;
-        Vector2 offset_vector = new Vector2(0,0);
+    public async void SpawnEnemyGroup(List<PackedScene> enemies, Vector2 initial_pos){
         foreach(PackedScene enemy in enemies){
-            Enemy new_enemy = (Enemy) SpawnEnemy(initial_pos + offset_vector ,enemy);
-            
+            Enemy new_enemy = (Enemy) SpawnEnemy(initial_pos ,enemy);
             new_enemy.SetPath(GAME_MAP.GetPathToGoal(new_enemy.GlobalPosition).Item1);
-            count += 1;
-            offset_vector += new Vector2(0, 64);
-            if(count >= enemies_in_col){
-                offset_vector += new Vector2(-64, -offset_vector.y);
-                count = 0;
-            }
+            await ToSignal(GetTree().CreateTimer(0.2f), "timeout");
         }
     }
-
-
+    
 }
