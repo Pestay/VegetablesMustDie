@@ -18,6 +18,10 @@ public class Enemy : KinematicBody2D{
     float max_speed = 100;
     Sprite enemy_sprite;
 
+    Health_bar health_bar;
+
+    public int health = 50;
+
     TileMap tile_map;
     
     Map map;
@@ -34,6 +38,16 @@ public class Enemy : KinematicBody2D{
         ANIMATIONS = GetNode<AnimationPlayer>("AnimationPlayer");
         WALK_ANIMATION = ResourceLoader.Load<Texture>("res://src/enemies/enemy_walk.png");
         IDLE_ANIMATION = ResourceLoader.Load<Texture>("res://src/enemies/enemy_idle.png");
+
+        PackedScene health_scene = GD.Load<PackedScene>("res://src/entities/Health bar.tscn");
+
+        health_bar = (Health_bar) health_scene.Instance();
+
+        health_bar.Position = this.Position + new Vector2(0, -42);
+
+        GetParent().AddChild(health_bar);
+
+        health_bar.setMaxValue(health);
         
         // DEBUG
         //TestPositions test_path = GetParent().GetParent().GetNode<TestPositions>("TestPositions");
@@ -43,6 +57,8 @@ public class Enemy : KinematicBody2D{
     public override void _PhysicsProcess(float delta){
         base._PhysicsProcess(delta);
         brain.UpdateFSM(delta);
+        health_bar.setValue(health);
+        health_bar.Position = this.Position + new Vector2(0, -42);
     }
 
      // Constantly move linearly to the position
