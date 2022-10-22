@@ -24,18 +24,7 @@ public class PathFinding : Node{
 
         var fScore = new Dictionary<Vector2, int>();
         fScore[initial_pos] = getH(initial_pos, goal);
-        /*
-        foreach(var tile_pos in tile_map.GetUsedCells())
-        {
-            if(!fScore.ContainsKey((Vector2) tile_pos))
-                fScore[(Vector2) tile_pos] = 1000000;
-                
-                
 
-            if(!gScore.ContainsKey((Vector2) tile_pos))
-                gScore[(Vector2) tile_pos] = 1000000;
-        }
-        */
         for (int i = 0; i < cells.GetLength(0); i++)
         {
 
@@ -105,6 +94,7 @@ public class PathFinding : Node{
                 }
             }
         }
+        GD.Print("PATH NOT FOUNDD");
         List<Vector2> errList = new List<Vector2>();
         return Tuple.Create(errList, blocked);
     }
