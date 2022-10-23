@@ -20,7 +20,7 @@ public class Traps : Node2D{
     public override void _Ready(){
         TRAP_PREVIEW = (PackedScene)ResourceLoader.Load("res://src/traps/TrapPreview.tscn");
         BLOCK_1_1 = (PackedScene)ResourceLoader.Load("res://src/traps/1x1block/WoodenBlock1x1.tscn");
-        BLOCK_1_1_PREVIEW = (Texture)ResourceLoader.Load("res://src/traps/1x1block/wooden_block_1x1.png");
+        BLOCK_1_1_PREVIEW = (Texture)ResourceLoader.Load("res://src/traps/1x1block/table.png");
         MAP = GetNode<Map>("../Map");
     }
 

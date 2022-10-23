@@ -38,7 +38,7 @@ public class TrapPreview : Node2D{
         trap_scene = trap;
         TRAP_SPRITE.Texture = trap_texture;
         RectangleShape2D collision_shape = new RectangleShape2D();
-        collision_shape.Extents = size*32 - new Vector2(5,5); //realsize - Offset
+        collision_shape.Extents = size*16 - new Vector2(5,5); //realsize - Offset
         OBJECT_DETECTOR.GetNode<CollisionShape2D>("CollisionShape2D").Shape = collision_shape;
     }
 
