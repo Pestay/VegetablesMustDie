@@ -128,9 +128,9 @@ public class PathFinding : Node{
             bool blocked = false;
             if (cells[(int)current.y,(int)current.x] == 10)
                 blocked = true;
-            current = cameFrom[current];
+            
             PathFindingCell new_cell = new PathFindingCell(current, blocked);
-            // SE SUMA EL OFFSET
+            current = cameFrom[current];
             total_path.Insert(0, new_cell);
         }
         return total_path;

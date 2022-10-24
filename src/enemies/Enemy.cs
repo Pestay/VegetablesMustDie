@@ -16,7 +16,6 @@ public class Enemy : KinematicBody2D{
     float health = 100;
     EnemyFSM brain;
 
-    public List<Vector2> best_path = new List<Vector2>();
 
     public override void _Ready(){
         enemy_sprite = GetNode<Sprite>("Sprite");
@@ -25,7 +24,18 @@ public class Enemy : KinematicBody2D{
         HEALTH_BAR = GetNode<HealthBar>("HealthBar");
         HEALTH_BAR.SetMaxValue(health);
     
+        //Debug
+        
     }
+
+    void SetPointsLinedebug(){
+        PathDebuger line_debug = GetNode<PathDebuger>("PathDebuger");
+        line_debug.ClearPoints();
+        foreach(PathFindingCell cell in current_path){
+            line_debug.AddPoint(cell.coord);
+        }
+    }
+
 
     public override void _PhysicsProcess(float delta){
         base._PhysicsProcess(delta);
@@ -51,8 +61,11 @@ public class Enemy : KinematicBody2D{
         }
         Vector2 destination = current_path[0].coord;
         MoveTo(delta, destination);
+        SetPointsLinedebug();
+        
         if(destination.DistanceSquaredTo(this.GlobalPosition) < 64){ // < 8*8 (1/4 of tile)
             current_path.RemoveAt(0);
+            
         }
     }
 
