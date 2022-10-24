@@ -130,8 +130,9 @@ public class PathFinding : Node{
                 blocked = true;
             
             PathFindingCell new_cell = new PathFindingCell(current, blocked);
-            current = cameFrom[current];
             total_path.Insert(0, new_cell);
+            
+            current = cameFrom[current];
         }
         return total_path;
     }
