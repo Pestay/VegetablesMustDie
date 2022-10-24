@@ -30,15 +30,23 @@ public class Enemies : Node2D{
         foreach(PackedScene enemy in enemies){
             Enemy new_enemy = (Enemy) SpawnEnemy(initial_pos ,enemy);
             current_enemies.Add(new_enemy);
+            //new_enemy.SetPath(GAME_MAP.GetPathFromFlowMap(new_enemy.GlobalPosition));
             new_enemy.SetPath( GAME_MAP.GetPathToGoal(new_enemy.GlobalPosition) );
             await ToSignal(GetTree().CreateTimer(0.2f), "timeout");
         }
     }
-
     public void _OnMapUpdate(){
         GD.Print("Map update");
         foreach(Enemy enemy in current_enemies){
             enemy.SetPath( GAME_MAP.GetPathToGoal( enemy.GlobalPosition ) );
+        }
+    }
+
+    public void _on_Map_MapUpdate() {
+        GAME_MAP.SetFlowMap();
+        foreach(Enemy enemy in current_enemies){
+            //enemy.SetPath(GAME_MAP.GetPathFromFlowMap(enemy.GlobalPosition));
+            enemy.SetPath( GAME_MAP.GetPathToGoal(enemy.GlobalPosition) );
         }
     }
     

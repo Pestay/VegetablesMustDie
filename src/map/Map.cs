@@ -14,6 +14,8 @@ public class Map : Node2D{
     Position2D ENEMY_GOAL;
     Dictionary<int, Vector2> ENEMIES_GATES = new Dictionary<int, Vector2>();
 
+    Dictionary<Vector2, FlowMapCell> FLOW_MAP;
+
     Position2D PLAYER_SPAWN;
     PathFinding PATH_FINDING;
     
@@ -33,6 +35,7 @@ public class Map : Node2D{
         
 
         map_matrix = CreateMatrixMap();
+        SetFlowMap();
     }
 
     // Create 2D array map filled with tile ids
@@ -71,11 +74,35 @@ public class Map : Node2D{
         
     }
 
+    public void SetFlowMap() {
+        FLOW_MAP = PATH_FINDING.CreateDijkstraMap(TILE_MAP.WorldToMap(ENEMY_GOAL.GlobalPosition), map_matrix);
+        foreach(Vector2 key in FLOW_MAP.Keys)
+            GD.Print(key);
+    }
+
+    public List<PathFindingCell> GetPathFromFlowMap(Vector2 from)
+    {
+        List<PathFindingCell> result = FLOW_MAP[TILE_MAP.WorldToMap(from)].path_to_goal;
+        List<PathFindingCell>  path = new List<PathFindingCell>();
+        foreach(PathFindingCell cell in result){
+            PathFindingCell new_cell = new PathFindingCell();
+            new_cell.coord = TILE_MAP.MapToWorld(cell.coord) + new Vector2(16,16);
+            new_cell.has_obstacle = cell.has_obstacle;
+            path.Add(new_cell);
+        }
+        path.Reverse();
+        return path;
+    }
+
+    public Dictionary<Vector2, FlowMapCell> GetFlowMap() => FLOW_MAP;
+
     public Dictionary<int, Vector2> GetGates() => ENEMIES_GATES;
 
     public Position2D GetPlayerSpawn() => PLAYER_SPAWN;
 
     public TileMap GetTileMap() => TILE_MAP;
+
+
 
 
     public List<PathFindingCell> GetPathToGoal(Vector2 from){

@@ -4,6 +4,17 @@ using System.Collections.Generic;
 using System.Linq;
 // Pathfinding algorithms
 
+public struct FlowMapCell{
+    public int distance;
+    public List<PathFindingCell> path_to_goal;
+
+    public FlowMapCell(int distance, List<PathFindingCell> path_to_goal)
+    {
+        this.distance = distance;
+        this.path_to_goal = path_to_goal;
+    }
+}
+
 
 public struct PathFindingCell{
         public Vector2 coord;
@@ -26,7 +37,7 @@ public class PathFinding : Node{
     public List<PathFindingCell> FindPath(Vector2 initial_pos, Vector2 goal, int[,] cells){
         bool blocked = false;
         Vector2 current;
-        int min = 1000000000;
+        int min = int.MaxValue;
         Vector2 key = new Vector2(-1,-1);
         Dictionary<Vector2, float> OpenList = new Dictionary<Vector2, float>();
 
@@ -50,9 +61,9 @@ public class PathFinding : Node{
             {
             Vector2 cell_pos = new Vector2(j,i);
             if(!fScore.ContainsKey( cell_pos) )
-                fScore[cell_pos] = 1000000;
+                fScore[cell_pos] = int.MaxValue;
             if(!gScore.ContainsKey(cell_pos) )
-                gScore[cell_pos] = 1000000;
+                gScore[cell_pos] = int.MaxValue;
             }
         }
 
@@ -60,7 +71,7 @@ public class PathFinding : Node{
 
 
         while (openSet.Count > 0) {
-            min = 1000000000;
+            min = int.MaxValue;
             key = new Vector2(-1,-1);
             foreach(Vector2 value in openSet)
             {
@@ -90,7 +101,7 @@ public class PathFinding : Node{
                 
                 if (!gScore.ContainsKey(neighbour))
                 {
-                    gScore[neighbour] = 100000;
+                    gScore[neighbour] = int.MaxValue;
                 }
                 
                 
@@ -115,6 +126,52 @@ public class PathFinding : Node{
         GD.Print("PATH NOT FOUNDD");
         List<PathFindingCell> errList = new List<PathFindingCell>();
         return errList;
+    }
+    /* Dijkstra Flow Map */
+
+    public Dictionary<Vector2, FlowMapCell> CreateDijkstraMap(Vector2 goal, int[,] cells){
+        Queue<Vector2> frontier = new Queue<Vector2>();
+
+        Dictionary<Vector2, Vector2> cameFrom = new Dictionary<Vector2,Vector2>();
+
+        cameFrom[goal] = new Vector2();
+
+        frontier.Enqueue(goal);
+
+        Dictionary<Vector2, int> distance = new Dictionary<Vector2,int>();
+
+        distance[goal] = 0;
+
+        while(frontier.Count != 0)
+        {
+            Vector2 current = frontier.Dequeue();
+            foreach(Vector2 neighbour in Neighbours(current, cells))
+            {
+                if(!distance.ContainsKey(neighbour))
+                {
+                    if(cells[(int)neighbour.y,(int)neighbour.x] == 0)
+                    {
+                        frontier.Enqueue(neighbour);
+                        distance[neighbour] = 1 + distance[current];
+                        cameFrom[neighbour] = current;
+                    }
+                    /*
+                    else if(cells[(int)neighbour.y,(int)neighbour.x] == 10)
+                    {
+                        frontier.Enqueue(neighbour);
+                        distance[neighbour] = 100 + distance[current];
+                        cameFrom[neighbour] = current;
+                    }
+                    */
+                }
+            }
+        }
+
+        Dictionary<Vector2, FlowMapCell> dijkstra_map = new Dictionary<Vector2, FlowMapCell>();
+        foreach(Vector2 cell in distance.Keys){
+            dijkstra_map[cell] = new FlowMapCell(distance[cell],reconstruct_path(cameFrom, cell, cells));
+        }
+        return dijkstra_map;
     }
 
 

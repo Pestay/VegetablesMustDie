@@ -27,7 +27,7 @@ zoom = Vector2( 0.5, 0.5 )
 script = ExtResource( 6 )
 
 [node name="Player" parent="." instance=ExtResource( 11 )]
-position = Vector2( 479, 86 )
+position = Vector2( 463, 79 )
 speed = 100
 
-[connection signal="MapUpdate" from="Map" to="Enemies" method="_OnMapUpdate"]
+[connection signal="MapUpdate" from="Map" to="Enemies" method="_on_Map_MapUpdate"]
