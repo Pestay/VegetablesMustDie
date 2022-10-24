@@ -7,25 +7,13 @@ using System.Text;
 // Enemy for testing purposes
 public class Enemy : KinematicBody2D{
 
-
     AnimationPlayer ANIMATIONS;
-    [Export]
-    List<Vector2> current_path = new List<Vector2>();
-
+    HealthBar HEALTH_BAR;
+    List<PathFindingCell> current_path = new List<PathFindingCell>();
     Vector2 velocity = Vector2.Zero;
     float max_speed = 50;
     Sprite enemy_sprite;
-
-    HealthBar HEALTH_BAR;
-
     float health = 100;
-
-    TileMap tile_map;
-    
-    Map map;
-
-    int[,] cells;
-
     EnemyFSM brain;
 
     public List<Vector2> best_path = new List<Vector2>();
@@ -36,10 +24,7 @@ public class Enemy : KinematicBody2D{
         ANIMATIONS = GetNode<AnimationPlayer>("AnimationPlayer");
         HEALTH_BAR = GetNode<HealthBar>("HealthBar");
         HEALTH_BAR.SetMaxValue(health);
-        
-        // DEBUG
-        //TestPositions test_path = GetParent().GetParent().GetNode<TestPositions>("TestPositions");
-        map = GetTree().Root.GetNode("Game").GetNode<Map>("Map");
+    
     }
 
     public override void _PhysicsProcess(float delta){
@@ -64,12 +49,14 @@ public class Enemy : KinematicBody2D{
         if(current_path.Count <= 0){
             return;
         }
-        Vector2 destination = current_path[0];
+        Vector2 destination = current_path[0].coord;
         MoveTo(delta, destination);
-        if(destination.DistanceSquaredTo(this.GlobalPosition) < 256){
+        if(destination.DistanceSquaredTo(this.GlobalPosition) < 64){ // < 8*8 (1/4 of tile)
             current_path.RemoveAt(0);
         }
     }
+
+    // Animations
 
     public void IdleAnimation(){
         if(ANIMATIONS.IsPlaying())
@@ -80,7 +67,11 @@ public class Enemy : KinematicBody2D{
     public void WalkAnimation(){
         if(!ANIMATIONS.IsPlaying())
             ANIMATIONS.Play("walk");
-        //enemy_sprite.Texture = WALK_ANIMATION;
+    }
+
+    public void AttackAnimation(){
+        if(!ANIMATIONS.IsPlaying())
+            ANIMATIONS.Play("attack");
     }
     
 
@@ -92,6 +83,16 @@ public class Enemy : KinematicBody2D{
         return false;
     }
 
+    public bool IsBlocked(){
+        if(current_path.Count > 0){
+            if( (current_path[0].has_obstacle ) ){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
 
     public void TakeDamage(float dmg){
         health -= dmg;
@@ -102,9 +103,10 @@ public class Enemy : KinematicBody2D{
     }
 
     // Setters and Getters
-    public void SetPath(List<Vector2> new_path){
+    public void SetPath(List<PathFindingCell> new_path){
         current_path = new_path;
     }
+
         
 }
 

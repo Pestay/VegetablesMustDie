@@ -39,12 +39,21 @@ public class EnemyFSM : Node
                 if(parent.HasReachTarget()){
                     return STATES.IDLE;
                 }
+                if(parent.IsBlocked()){
+                    return STATES.ATTACK;
+                }
                 break;
             case STATES.IDLE:
                 if(!parent.HasReachTarget()){
                     return STATES.WALK;
                 }
                 break;
+            case STATES.ATTACK:
+                if(!parent.IsBlocked()){
+                    return STATES.IDLE;
+                }
+                break;
+
         }
         return STATES.NULL;
     }

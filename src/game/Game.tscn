@@ -29,3 +29,5 @@ script = ExtResource( 6 )
 [node name="Player" parent="." instance=ExtResource( 11 )]
 position = Vector2( 479, 86 )
 speed = 100
+
+[connection signal="MapUpdate" from="Map" to="Enemies" method="_OnMapUpdate"]

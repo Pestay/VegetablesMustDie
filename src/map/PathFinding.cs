@@ -3,9 +3,27 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 // Pathfinding algorithms
+
+
+public struct PathFindingCell{
+        public Vector2 coord;
+        public bool has_obstacle;
+
+        public PathFindingCell(Vector2 new_coord, bool obstacle){
+            this.has_obstacle = obstacle;
+            this.coord = new_coord;
+         }
+    }
+
+
 public class PathFinding : Node{
 
-    public Tuple<List<Vector2>, bool> FindPath(Vector2 initial_pos, Vector2 goal, int[,] cells){
+
+    // Data about cell
+    
+    
+
+    public List<PathFindingCell> FindPath(Vector2 initial_pos, Vector2 goal, int[,] cells){
         bool blocked = false;
         Vector2 current;
         int min = 1000000000;
@@ -95,26 +113,27 @@ public class PathFinding : Node{
             }
         }
         GD.Print("PATH NOT FOUNDD");
-        List<Vector2> errList = new List<Vector2>();
-        return Tuple.Create(errList, blocked);
+        List<PathFindingCell> errList = new List<PathFindingCell>();
+        return errList;
     }
 
 
-    private Tuple<List<Vector2>, bool> reconstruct_path(Dictionary<Vector2,Vector2> cameFrom, Vector2 current, int[,] cells)
+    private List<PathFindingCell> reconstruct_path(Dictionary<Vector2,Vector2> cameFrom, Vector2 current, int[,] cells)
     {
-        bool blocked = false;
-        List<Vector2> total_path = new List<Vector2>();
+        List<PathFindingCell> total_path = new List<PathFindingCell>();
+        total_path.Add(new PathFindingCell(current, false));
 
-        total_path.Add(current);
+        
         while (cameFrom.Keys.Contains(current)){
+            bool blocked = false;
             if (cells[(int)current.y,(int)current.x] == 10)
                 blocked = true;
             current = cameFrom[current];
-            
+            PathFindingCell new_cell = new PathFindingCell(current, blocked);
             // SE SUMA EL OFFSET
-            total_path.Insert(0,current);
+            total_path.Insert(0, new_cell);
         }
-        return Tuple.Create(total_path,blocked);
+        return total_path;
     }
 
 

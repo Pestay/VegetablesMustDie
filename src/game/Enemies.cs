@@ -10,10 +10,8 @@ public class Enemies : Node2D{
     List<PackedScene> enemies_group;
     Map GAME_MAP;
 
-    public override void _Ready(){
-
-        
-    }
+    // Debug Purposes
+    List<Enemy> current_enemies = new List<Enemy>();
 
 
     public void Init(Map game_map){
@@ -31,8 +29,16 @@ public class Enemies : Node2D{
     public async void SpawnEnemyGroup(List<PackedScene> enemies, Vector2 initial_pos){
         foreach(PackedScene enemy in enemies){
             Enemy new_enemy = (Enemy) SpawnEnemy(initial_pos ,enemy);
-            new_enemy.SetPath(GAME_MAP.GetPathToGoal(new_enemy.GlobalPosition).Item1);
+            current_enemies.Add(new_enemy);
+            new_enemy.SetPath( GAME_MAP.GetPathToGoal(new_enemy.GlobalPosition) );
             await ToSignal(GetTree().CreateTimer(0.2f), "timeout");
+        }
+    }
+
+    public void _OnMapUpdate(){
+        GD.Print("Map update");
+        foreach(Enemy enemy in current_enemies){
+            enemy.SetPath( GAME_MAP.GetPathToGoal( enemy.GlobalPosition ) );
         }
     }
     

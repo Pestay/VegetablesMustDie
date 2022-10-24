@@ -5,10 +5,15 @@ using System.Collections.Generic;
 
 // Establece el entorno del juego y entrega informacion sobre el entorno
 public class Map : Node2D{
+    [Signal]
+    delegate void MapUpdate();
+
     
+
     TileMap TILE_MAP;
     Position2D ENEMY_GOAL;
     Dictionary<int, Vector2> ENEMIES_GATES = new Dictionary<int, Vector2>();
+
     Position2D PLAYER_SPAWN;
     PathFinding PATH_FINDING;
     
@@ -60,8 +65,10 @@ public class Map : Node2D{
 
     // Add a trap to map matrix
     public void SetNewBlock(Vector2 tile_pos, int block_weight){
-        map_matrix[(int) tile_pos.y, (int) tile_pos.x] = block_weight;
+        map_matrix[(int) tile_pos.y, (int) tile_pos.x] = 10; // CHANGE THISS!!!
         // Emit signal map update
+        EmitSignal(nameof(MapUpdate));
+        
     }
 
     public Dictionary<int, Vector2> GetGates() => ENEMIES_GATES;
@@ -71,17 +78,18 @@ public class Map : Node2D{
     public TileMap GetTileMap() => TILE_MAP;
 
 
-    public Tuple<List<Vector2>, bool> GetPathToGoal(Vector2 from){
-        Tuple<List<Vector2>, bool> result = PATH_FINDING.FindPath( TILE_MAP.WorldToMap(from), TILE_MAP.WorldToMap(ENEMY_GOAL.GlobalPosition), map_matrix);
+    public List<PathFindingCell> GetPathToGoal(Vector2 from){
+        List<PathFindingCell> result = PATH_FINDING.FindPath( TILE_MAP.WorldToMap(from), TILE_MAP.WorldToMap(ENEMY_GOAL.GlobalPosition), map_matrix);
         
         // Convert  local coordinates to global coordinates
-        List<Vector2> path = new List<Vector2>();
-        foreach(Vector2 coord in result.Item1){
-            path.Add( TILE_MAP.MapToWorld(coord) + new Vector2(16,16)); // Map tile + Medium tile offset
+        List<PathFindingCell>  path = new List<PathFindingCell>();
+        foreach(PathFindingCell cell in result){
+            PathFindingCell new_cell = new PathFindingCell();
+            new_cell.coord = TILE_MAP.MapToWorld(cell.coord) + new Vector2(16,16);
+            new_cell.has_obstacle = cell.has_obstacle;
+            path.Add(new_cell);
         }
-        
-        Tuple<List<Vector2>, bool> data = new Tuple<List<Vector2>, bool>(path, result.Item2);
-        return data;
+        return path;
     }
 
 
