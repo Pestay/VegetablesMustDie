@@ -8,8 +8,8 @@ public class FreeViewCamera : Camera2D{
     float zoom_speed = 4;
     public override void _PhysicsProcess(float delta){
         base._PhysicsProcess(delta);
-        Move(delta);
-        HandleZoom(delta);
+        //Move(delta);
+        //HandleZoom(delta);
     }
 
     void Move(float delta){
