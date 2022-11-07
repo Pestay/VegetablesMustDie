@@ -35,13 +35,45 @@ margin_right = 583.0
 margin_bottom = 44.0
 text = "Exit"
 
-[node name="RichTextLabel" type="RichTextLabel" parent="."]
-margin_left = 422.0
-margin_top = 207.0
-margin_right = 596.0
-margin_bottom = 230.0
+[node name="Título" type="RichTextLabel" parent="."]
+margin_left = 378.0
+margin_top = 201.0
+margin_right = 514.0
+margin_bottom = 224.0
+rect_scale = Vector2( 2, 2 )
 custom_fonts/mono_font = SubResource( 1 )
-text = "Vegetable must die"
+text = "Vegetables must die"
+
+[node name="Paralelo" type="RichTextLabel" parent="."]
+margin_left = 19.0
+margin_top = 423.0
+margin_right = 155.0
+margin_bottom = 446.0
+rect_pivot_offset = Vector2( 52, 15 )
+custom_fonts/mono_font = SubResource( 1 )
+text = "Paralelo 1"
+
+[node name="Assets" type="RichTextLabel" parent="."]
+margin_left = 19.0
+margin_top = 449.0
+margin_right = 248.0
+margin_bottom = 519.0
+rect_pivot_offset = Vector2( 52, 15 )
+custom_fonts/mono_font = SubResource( 1 )
+text = "Assets usados:
+2D Pixel Art Vegetable Monsters Sprite Pack
+"
+
+[node name="Creadores" type="RichTextLabel" parent="."]
+margin_left = 18.0
+margin_top = 357.0
+margin_right = 172.0
+margin_bottom = 428.0
+custom_fonts/mono_font = SubResource( 1 )
+text = "Creadores:
+Godotianos
+-Pablo Estay
+-Gerson Marihuan"
 
 [connection signal="pressed" from="VBoxContainer/Play" to="." method="_OnPlayPressed"]
 [connection signal="pressed" from="VBoxContainer/Exit" to="." method="_OnExitPressed"]
