@@ -9,7 +9,9 @@ public class Enemy : KinematicBody2D{
 
     AnimationPlayer ANIMATIONS;
     HealthBar HEALTH_BAR;
+    EffectsManager EFFECTS_MANAGER;
     List<PathFindingCell> current_path = new List<PathFindingCell>();
+    
     Vector2 velocity = Vector2.Zero;
     float max_speed = 50;
     Sprite enemy_sprite;
@@ -21,6 +23,7 @@ public class Enemy : KinematicBody2D{
         enemy_sprite = GetNode<Sprite>("Sprite");
         brain = GetNode<EnemyFSM>("EnemyFSM");
         ANIMATIONS = GetNode<AnimationPlayer>("AnimationPlayer");
+        EFFECTS_MANAGER =  GetNode<EffectsManager>("EffectsManager");
         HEALTH_BAR = GetNode<HealthBar>("HealthBar");
         HEALTH_BAR.SetMaxValue(health);
     
@@ -47,8 +50,9 @@ public class Enemy : KinematicBody2D{
         Vector2 to_pos = (destination - this.GlobalPosition).Normalized();
         Vector2 new_velocity = to_pos*max_speed;
         velocity = new_velocity;
+        // Apply effects
+        velocity = EFFECTS_MANAGER.ApplyEffectsForProperty(EffectsManager.PROPERTY_TYPE.Velocity, velocity);
         velocity = this.MoveAndSlide(velocity);
-
     }
 
     // --- Actions
@@ -96,6 +100,7 @@ public class Enemy : KinematicBody2D{
         return false;
     }
 
+
     public bool IsBlocked(){
         if(current_path.Count > 0){
             if( (current_path[0].has_obstacle ) ){
@@ -104,7 +109,6 @@ public class Enemy : KinematicBody2D{
         }
         return false;
     }
-
 
 
     public void TakeDamage(float dmg){
@@ -120,6 +124,8 @@ public class Enemy : KinematicBody2D{
         current_path = new_path;
     }
 
-        
+
+
+
 }
 

@@ -1,10 +1,11 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://src/enemies/Enemy.cs" type="Script" id=1]
 [ext_resource path="res://src/enemies/lechuga-sprite.png" type="Texture" id=2]
 [ext_resource path="res://src/enemies/EnemyFSM.cs" type="Script" id=3]
 [ext_resource path="res://src/entities/HealthBar.tscn" type="PackedScene" id=4]
 [ext_resource path="res://src/debug/PathDebuger.tscn" type="PackedScene" id=5]
+[ext_resource path="res://src/enemies/EffectsManager.cs" type="Script" id=6]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 7.0
@@ -44,6 +45,21 @@ tracks/0/keys = {
 
 [node name="Enemy" type="KinematicBody2D" groups=["Enemy"]]
 script = ExtResource( 1 )
+__meta__ = {
+"_editor_description_": "How interacts with the envirioment and What are their properties "
+}
+
+[node name="EnemyFSM" type="Node" parent="."]
+script = ExtResource( 3 )
+__meta__ = {
+"_editor_description_": "How it"
+}
+
+[node name="EffectsManager" type="Node2D" parent="."]
+script = ExtResource( 6 )
+__meta__ = {
+"_editor_description_": "Manage all buff and debuffs"
+}
 
 [node name="HealthBar" parent="." instance=ExtResource( 4 )]
 position = Vector2( -7, -14 )
@@ -57,9 +73,6 @@ frame = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )
-
-[node name="EnemyFSM" type="Node" parent="."]
-script = ExtResource( 3 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/attack = SubResource( 3 )
