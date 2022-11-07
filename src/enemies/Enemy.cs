@@ -65,7 +65,7 @@ public class Enemy : KinematicBody2D{
         }
         Vector2 destination = current_path[0].coord;
         MoveTo(delta, destination);
-        SetPointsLinedebug();
+        //SetPointsLinedebug();
         
         if(destination.DistanceSquaredTo(this.GlobalPosition) < 64){ // < 8*8 (1/4 of tile)
             current_path.RemoveAt(0);

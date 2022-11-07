@@ -44,16 +44,15 @@ public class Game : Node2D{
 
         // DEBUG PURPOSES
         PackedScene enemy = Godot.ResourceLoader.Load<PackedScene>("res://src/enemies/Enemy.tscn");
-        Wave new_wave = new Wave(Enumerable.Repeat( enemy, 1).ToList(), 0); 
+        Wave new_wave = new Wave(Enumerable.Repeat( enemy, 10).ToList(), 0); 
         waves = new WaveConfig( new List<Wave>(){new_wave} );
+
+        StartWave();
     }
 
     public override void _Process(float delta)
     {
         base._Process(delta);
-        if (Input.IsActionJustPressed("ui_accept")){
-            StartWave();
-        }
     }
 
 
