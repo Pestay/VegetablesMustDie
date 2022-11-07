@@ -1,11 +1,29 @@
-[gd_scene format=2]
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://src/traps/detergent/detergent.png" type="Texture" id=1]
+[ext_resource path="res://src/traps/Traps.cs" type="Script" id=2]
 
 [node name="Traps" type="Node2D"]
+script = ExtResource( 2 )
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-visible = false
+[node name="BuildingMenu" type="CanvasLayer" parent="."]
 
-[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer"]
-margin_right = 152.0
-margin_bottom = 36.0
-text = "building mode"
+[node name="Control" type="Control" parent="BuildingMenu"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="BuildingMenu/Control"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -132.0
+margin_top = -67.0
+margin_right = 132.0
+
+[node name="Detergent" type="TextureButton" parent="BuildingMenu/Control/HBoxContainer"]
+margin_right = 64.0
+margin_bottom = 67.0
+rect_min_size = Vector2( 64, 64 )
+texture_normal = ExtResource( 1 )
+expand = true

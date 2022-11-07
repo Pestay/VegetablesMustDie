@@ -1,0 +1,10 @@
+{
+    "WoodenTable":{
+        "texture_preview": "res://src/traps/1x1block/table.png",
+        "scene": "res://src/traps/1x1block/WoodenBlock1x1.tscn"
+    },
+    "Detergent":{
+        "texture_preview": "res://src/traps/detergent/detergent.png",
+        "scene": "res://src/traps/detergent/DetergentFloor.tscn"
+    }
+}

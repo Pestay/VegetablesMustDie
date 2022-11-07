@@ -7,8 +7,13 @@ public class Traps : Node2D{
 
     // Traps
     PackedScene TRAP_PREVIEW;
+    
     PackedScene BLOCK_1_1;
     Texture BLOCK_1_1_PREVIEW;
+
+    PackedScene DETERGENT;
+    Texture DETERGENT_PREVIEW;
+
 
     // Nodes
     Map MAP;
@@ -19,8 +24,11 @@ public class Traps : Node2D{
 
     public override void _Ready(){
         TRAP_PREVIEW = (PackedScene)ResourceLoader.Load("res://src/traps/TrapPreview.tscn");
+
         BLOCK_1_1 = (PackedScene)ResourceLoader.Load("res://src/traps/1x1block/WoodenBlock1x1.tscn");
         BLOCK_1_1_PREVIEW = (Texture)ResourceLoader.Load("res://src/traps/1x1block/table.png");
+
+        
         MAP = GetNode<Map>("../Map");
     }
 
@@ -47,13 +55,13 @@ public class Traps : Node2D{
 
 
     public void ActivateBuildingMode(){
-        GetNode<CanvasLayer>("CanvasLayer").Visible = true;
+        GetNode<CanvasLayer>("BuildingMenu").Visible = true;
         CreateTrapPreview();
     }
 
 
     public void DeactivateBuildingMode(){
-        GetNode<CanvasLayer>("CanvasLayer").Visible = false;
+        GetNode<CanvasLayer>("BuildingMenu").Visible = false;
         DeleteTrapPreview();
     }
 
