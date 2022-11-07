@@ -94,7 +94,7 @@ public class PathFinding : Node{
             foreach (Vector2 neighbour in Neighbours(current, cells))
             {
                 int tentative_gScore;
-                if(cells[(int)neighbour.y,(int)neighbour.x] == 0)
+                if(cells[(int)neighbour.y,(int)neighbour.x] != 0 && cells[(int)neighbour.y,(int)neighbour.x] != 10)
                     tentative_gScore = gScore[current] + 1;
                 else
                     tentative_gScore = gScore[current] + 100;
@@ -112,7 +112,7 @@ public class PathFinding : Node{
                     fScore[neighbour] = tentative_gScore + getH(neighbour, goal);
                     
                     
-                    if (!openSet.Contains(neighbour) && (cells[(int)neighbour.y,(int)neighbour.x] != 3))
+                    if (!openSet.Contains(neighbour) && (cells[(int)neighbour.y,(int)neighbour.x] != 0))
                     {
                         openSet.Add(neighbour);
                         if (cells[(int)neighbour.y,(int)neighbour.x] == 10)
