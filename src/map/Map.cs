@@ -57,7 +57,7 @@ public class Map : Node2D{
             int x = (int) (tile_cell.x - map_offset.x);
             int y = (int) (tile_cell.y - map_offset.y);
             map_array[y,x] = TILE_MAP.GetCell((int) tile_cell.x,(int) tile_cell.y);
-            
+            GD.Print(map_array[y,x]);
 
         }
 
