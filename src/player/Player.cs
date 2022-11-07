@@ -73,23 +73,21 @@ public class Player : KinematicBody2D{
         GetInput();
         trapsState = GetTree().Root.GetNode<Traps>("Game/Traps").in_building;
         velocity = MoveAndSlide(velocity);
+        if(Input.IsActionJustPressed("left_click")){
+            Shoot();
+        }
+
     }
 
-    public override void _UnhandledInput(InputEvent @event)
-    {
-        if(@event is InputEventMouseButton mouseEvent && !trapsState) 
-        {
-            if (mouseEvent.ButtonIndex == (int)ButtonList.Left && mouseEvent.Pressed)
-            {
-                Vector2 CursorPos = GetLocalMousePosition();
-                Bullet bullet = (Bullet)bulletScene.Instance();
-                bullet.Position = Position;
-                bullet.Rotation = CursorPos.Angle();
-                GetParent().AddChild(bullet);
-                GetTree().SetInputAsHandled();
-            }
-        }
+    void Shoot(){
+        Vector2 CursorPos = GetLocalMousePosition();
+        Bullet bullet = (Bullet)bulletScene.Instance();
+        bullet.Position = Position;
+        bullet.Rotation = CursorPos.Angle();
+        GetParent().AddChild(bullet);
+        GetTree().SetInputAsHandled();
     }
+
 
     public Vector2 GetVelocity() => velocity;
 

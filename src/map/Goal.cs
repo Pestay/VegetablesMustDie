@@ -3,16 +3,12 @@ using System;
 
 public class Goal : Area2D{
 
-    public override void _Ready(){
-        
-    }
-
-    
-
+    [Signal]
+    delegate void EnemyReachGoal();
 
     public void _on_Goal_body_entered( Node body ){
-        GD.Print("INSIDE");
         if(body.IsInGroup("Enemy")){
+            EmitSignal( nameof(EnemyReachGoal) );
             body.QueueFree();
         }
 

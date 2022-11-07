@@ -34,6 +34,7 @@ public class Game : Node2D{
     Map GAME_MAP;
     Enemies ENEMIES;
     WaveConfig waves;
+    int health_points = 2;
 
     public override void _Ready(){
         GAME_MAP = GetNode<Map>("Map");
@@ -48,6 +49,7 @@ public class Game : Node2D{
         waves = new WaveConfig( new List<Wave>(){new_wave} );
 
         StartWave();
+        UpdateHP(30);
     }
 
     public override void _Process(float delta)
@@ -62,6 +64,21 @@ public class Game : Node2D{
         int n_gate = wave.spawn_gate;
         Vector2 spawn_pos = GAME_MAP.GetGates()[n_gate];
         ENEMIES.SpawnEnemyGroup(wave.wave_enemies, spawn_pos);
+    }
+
+
+    public void TakeDamage(int dmg){
+        UpdateHP(health_points - dmg);
+    }
+
+    void UpdateHP(int new_hp){
+        health_points = new_hp;
+        Label label = GetNode<Label>("GameHud/Control/HBoxContainer/HealthPoints");
+        label.Text = health_points.ToString();
+    }
+
+    void _on_Map_EnemyReachGoal(){
+        TakeDamage(1);
     }
 
 }

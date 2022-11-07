@@ -511,8 +511,7 @@ points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
 4/shapes = [  ]
 4/z_index = 0
 
-[sub_resource type="ConvexPolygonShape2D" id=2]
-points = PoolVector2Array( 30, 31, 0, 31, 0, 0, 30, 0 )
+[sub_resource type="RectangleShape2D" id=50]
 
 [node name="Map" type="Node2D"]
 script = ExtResource( 3 )
@@ -551,6 +550,7 @@ __meta__ = {
 }
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Goal"]
-shape = SubResource( 2 )
+shape = SubResource( 50 )
 
+[connection signal="EnemyReachGoal" from="Goal" to="." method="_on_Goal_EnemyReachGoal"]
 [connection signal="body_entered" from="Goal" to="Goal" method="_on_Goal_body_entered"]

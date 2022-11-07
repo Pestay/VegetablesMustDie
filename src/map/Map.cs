@@ -8,7 +8,9 @@ public class Map : Node2D{
     [Signal]
     delegate void MapUpdate();
 
-    
+    [Signal]
+    delegate void EnemyReachGoal();
+
 
     TileMap TILE_MAP;
     Area2D ENEMY_GOAL;
@@ -103,8 +105,6 @@ public class Map : Node2D{
     public TileMap GetTileMap() => TILE_MAP;
 
 
-
-
     public List<PathFindingCell> GetPathToGoal(Vector2 from){
         List<PathFindingCell> result = PATH_FINDING.FindPath( TILE_MAP.WorldToMap(from), TILE_MAP.WorldToMap(ENEMY_GOAL.GlobalPosition), map_matrix);
         
@@ -119,5 +119,8 @@ public class Map : Node2D{
         return path;
     }
 
+    void _on_Goal_EnemyReachGoal(){
+        EmitSignal( nameof(EnemyReachGoal) );
+    }
 
 }
