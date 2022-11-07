@@ -11,7 +11,7 @@ public class Map : Node2D{
     
 
     TileMap TILE_MAP;
-    Position2D ENEMY_GOAL;
+    Area2D ENEMY_GOAL;
     Dictionary<int, Vector2> ENEMIES_GATES = new Dictionary<int, Vector2>();
 
     Dictionary<Vector2, FlowMapCell> FLOW_MAP;
@@ -23,7 +23,7 @@ public class Map : Node2D{
 
     public override void _Ready(){
         TILE_MAP = GetNode<TileMap>("TileMap");
-        ENEMY_GOAL = GetNode<Position2D>("Goal");
+        ENEMY_GOAL = GetNode<Area2D>("Goal");
         PLAYER_SPAWN =GetNode<Position2D>("PlayerSpawn");
         PATH_FINDING = GetNode<PathFinding>("PathFinding");
 

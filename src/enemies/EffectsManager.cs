@@ -17,8 +17,8 @@ public class EffectsManager : Node2D{
 
     public override void _Ready(){
         // TO TEST
-        PackedScene sloweffect = GD.Load<PackedScene>("res://src/effects/SlowDownEffect.tscn");
-        AttachEffect(PROPERTY_TYPE.Velocity, sloweffect.Instance<SlowDownEffect>() );
+        //PackedScene sloweffect = GD.Load<PackedScene>("res://src/effects/SlowDownEffect.tscn");
+        //AttachEffect(PROPERTY_TYPE.Velocity, sloweffect.Instance<SlowDownEffect>() );
     }
 
     public void AttachEffect(PROPERTY_TYPE type, PropertyEffect effect){
