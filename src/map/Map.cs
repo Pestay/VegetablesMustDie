@@ -59,7 +59,6 @@ public class Map : Node2D{
             int x = (int) (tile_cell.x - map_offset.x);
             int y = (int) (tile_cell.y - map_offset.y);
             map_array[y,x] = TILE_MAP.GetCell((int) tile_cell.x,(int) tile_cell.y);
-            GD.Print(map_array[y,x]);
 
         }
 
@@ -78,8 +77,8 @@ public class Map : Node2D{
 
     public void SetFlowMap() {
         FLOW_MAP = PATH_FINDING.CreateDijkstraMap(TILE_MAP.WorldToMap(ENEMY_GOAL.GlobalPosition), map_matrix);
-        foreach(Vector2 key in FLOW_MAP.Keys)
-            GD.Print(key);
+        //foreach(Vector2 key in FLOW_MAP.Keys)
+        //    GD.Print(key);
     }
 
     public List<PathFindingCell> GetPathFromFlowMap(Vector2 from)
