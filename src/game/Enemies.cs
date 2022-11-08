@@ -30,6 +30,7 @@ public class Enemies : Node2D{
         foreach(PackedScene enemy in enemies){
             Enemy new_enemy = (Enemy) SpawnEnemy(initial_pos ,enemy);
             current_enemies.Add(new_enemy);
+            //new_enemy.Connect("Die", this , nameof(_onEnemyDie));
             //new_enemy.SetPath(GAME_MAP.GetPathFromFlowMap(new_enemy.GlobalPosition));
             new_enemy.SetPath( GAME_MAP.GetPathToGoal(new_enemy.GlobalPosition) );
             await ToSignal(GetTree().CreateTimer(0.2f), "timeout");
@@ -48,6 +49,10 @@ public class Enemies : Node2D{
             //enemy.SetPath(GAME_MAP.GetPathFromFlowMap(enemy.GlobalPosition));
             enemy.SetPath( GAME_MAP.GetPathToGoal(enemy.GlobalPosition) );
         }
+    }
+    
+    void _onEnemyDie(){
+        
     }
     
 }

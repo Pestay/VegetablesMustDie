@@ -9,6 +9,7 @@ public class Goal : Area2D{
     public void _on_Goal_body_entered( Node body ){
         if(body.IsInGroup("Enemy")){
             EmitSignal( nameof(EnemyReachGoal) );
+            //body.TakeDamage(10000);
             body.QueueFree();
         }
 

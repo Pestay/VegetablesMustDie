@@ -18,6 +18,10 @@ public class Enemy : KinematicBody2D{
     float health = 100;
     EnemyFSM brain;
 
+    [Signal]
+    delegate void Dead();
+
+
 
     public override void _Ready(){
         enemy_sprite = GetNode<Sprite>("Sprite");
@@ -115,6 +119,7 @@ public class Enemy : KinematicBody2D{
         health -= dmg;
         HEALTH_BAR.SetValue(health);
         if(health <= 0){
+            EmitSignal(nameof(Die));
             QueueFree();
         }
     }
@@ -124,7 +129,9 @@ public class Enemy : KinematicBody2D{
         current_path = new_path;
     }
 
-
+    public void Die(){
+        EmitSignal(nameof(Dead));
+    }
 
 
 }
