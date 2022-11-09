@@ -1,6 +1,6 @@
 using Godot;
 using System;
-
+using Newtonsoft.Json;
 // Handle all traps.
 
 public class Traps : Node2D{
@@ -8,12 +8,7 @@ public class Traps : Node2D{
     // Traps
     PackedScene TRAP_PREVIEW;
     
-    PackedScene BLOCK_1_1;
-    Texture BLOCK_1_1_PREVIEW;
-
-    PackedScene DETERGENT;
-    Texture DETERGENT_PREVIEW;
-
+    PreviewsData.Data PREVIEWS_DATA = new PreviewsData.Data();
 
     // Nodes
     Map MAP;
@@ -24,10 +19,6 @@ public class Traps : Node2D{
 
     public override void _Ready(){
         TRAP_PREVIEW = (PackedScene)ResourceLoader.Load("res://src/traps/TrapPreview.tscn");
-
-        BLOCK_1_1 = (PackedScene)ResourceLoader.Load("res://src/traps/1x1block/WoodenBlock1x1.tscn");
-        BLOCK_1_1_PREVIEW = (Texture)ResourceLoader.Load("res://src/traps/1x1block/table.png");
-
         
         MAP = GetNode<Map>("../Map");
     }
@@ -56,7 +47,7 @@ public class Traps : Node2D{
 
     public void ActivateBuildingMode(){
         GetNode<CanvasLayer>("BuildingMenu").Visible = true;
-        CreateTrapPreview();
+        //CreateTrapPreview();
     }
 
 
@@ -66,16 +57,23 @@ public class Traps : Node2D{
     }
 
 
-    void CreateTrapPreview(){
+    void CreateTrapPreview(string trap){
+        DeleteTrapPreview();
         current_trap = TRAP_PREVIEW.Instance<TrapPreview>();
-        current_trap.Constructor(MAP.GetTileMap());
+        current_trap.Constructor( MAP.GetTileMap() );
         current_trap.GlobalPosition = new Vector2(300, 540);
         current_trap.Connect("PlaceTrap", this, "_OnPlaceTrap");
         AddChild(current_trap);
-        current_trap.SetTrap(BLOCK_1_1_PREVIEW, BLOCK_1_1, new Vector2(1,1));
+        // Get Trap data
+        PackedScene scn = ResourceLoader.Load<PackedScene>(PREVIEWS_DATA.data[trap].Scene);
+        Texture texture = ResourceLoader.Load<Texture>(PREVIEWS_DATA.data[trap].TexturePreview);
+        current_trap.SetTrap(texture, scn, new Vector2(1,1));
         // Set wall 1x1 
         
     }
+
+
+    
 
 
     void DeleteTrapPreview(){
@@ -89,6 +87,17 @@ public class Traps : Node2D{
         MAP.SetNewBlock(tile_pos, 10);
     }
 
+
+    void _on_Detergent_pressed(){
+        CreateTrapPreview("Detergent");
+
+    }
+
+
+    void _on_Table_pressed(){
+        CreateTrapPreview("WoodenTable");
+
+    }
 
 
 

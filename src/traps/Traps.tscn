@@ -6,7 +6,6 @@
 script = ExtResource( 2 )
 
 [node name="BuildingMenu" type="CanvasLayer" parent="."]
-visible = false
 
 [node name="Control" type="Control" parent="BuildingMenu"]
 anchor_right = 1.0
@@ -33,3 +32,6 @@ margin_right = 144.0
 margin_bottom = 67.0
 rect_min_size = Vector2( 64, 64 )
 text = "Table"
+
+[connection signal="pressed" from="BuildingMenu/Control/HBoxContainer/Detergent" to="." method="_on_Detergent_pressed"]
+[connection signal="pressed" from="BuildingMenu/Control/HBoxContainer/Table" to="." method="_on_Table_pressed"]
