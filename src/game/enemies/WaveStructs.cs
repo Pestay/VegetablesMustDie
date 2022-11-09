@@ -36,6 +36,13 @@ namespace WaveStructs{
             wave_enemies.RemoveAt(0);
             return enemies;
         }
+
+        public bool IsEmpty(){
+            if(wave_enemies.Count <= 0){
+                return true;
+            }
+            return false;
+        }
 }
     
 }

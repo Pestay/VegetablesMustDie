@@ -25,8 +25,9 @@ public class Game : Node2D{
 
         // DEBUG PURPOSES
         PackedScene enemy = Godot.ResourceLoader.Load<PackedScene>("res://src/enemies/Enemy.tscn");
-        WaveStructs.Group enemies = new WaveStructs.Group(Enumerable.Repeat( enemy, 10).ToList(), 0); 
-        WaveStructs.Wave waves = new WaveStructs.Wave( new List<WaveStructs.Group>(){enemies} );
+        WaveStructs.Group enemies1 = new WaveStructs.Group(Enumerable.Repeat( enemy, 2).ToList(), 0); 
+        WaveStructs.Group enemies2 = new WaveStructs.Group(Enumerable.Repeat( enemy, 5).ToList(), 0); 
+        WaveStructs.Wave waves = new WaveStructs.Wave( new List<WaveStructs.Group>(){enemies1,enemies2} );
         ENEMIES.StartWave(waves);
 
 
@@ -61,6 +62,10 @@ public class Game : Node2D{
         TakeDamage(1);
     }
 
+    void _on_Enemies_WaveFinished(){
+        Win();
+    }
+
 
     async void GameOver(){
         is_game_over = true;
@@ -70,6 +75,13 @@ public class Game : Node2D{
         GetTree().ChangeScene("res://src/main_menu/Menu.tscn");
     }
 
+
+    async void Win(){
+        Control win = GetNode<Control>("GameHud/Victory");
+        win.Visible = true;
+        await ToSignal(GetTree().CreateTimer(3), "timeout");
+        GetTree().ChangeScene("res://src/main_menu/Menu.tscn");
+    }
 
 
 }

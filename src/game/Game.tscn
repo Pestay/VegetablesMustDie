@@ -98,3 +98,4 @@ speed = 100
 
 [connection signal="EnemyReachGoal" from="Map" to="." method="_on_Map_EnemyReachGoal"]
 [connection signal="MapUpdate" from="Map" to="Enemies" method="_on_Map_MapUpdate"]
+[connection signal="WaveFinished" from="Enemies" to="." method="_on_Enemies_WaveFinished"]

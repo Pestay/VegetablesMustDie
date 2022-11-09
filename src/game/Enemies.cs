@@ -6,6 +6,8 @@ using System.Linq;
 // Enemy coordinator, spawn etc...
 public class Enemies : Node2D{
 
+    [Signal]
+    delegate void WaveFinished();
 
     List<PackedScene> enemies_group;
     Map GAME_MAP;
@@ -56,7 +58,14 @@ public class Enemies : Node2D{
     void _onEnemyDie(Enemy enemy){
         // Delete enemy from list
         current_enemies.Remove(enemy);
-        GD.Print(current_enemies.Count());
+        if(current_enemies.Count <= 0){ // Spawn new enemy group when there is no group
+            if(!current_wave.IsEmpty()){
+                SpawnNextGroup(current_wave);
+            }
+            else{
+                EmitSignal(nameof(WaveFinished));
+            }
+        }
     }
 
 
@@ -65,6 +74,9 @@ public class Enemies : Node2D{
         // Delete current enemies
         GD.Print("Starting new wave");
         current_wave = wave;
+        if(wave.IsEmpty()){
+            GD.Print(" Wave empty!! try to put some group of enemies ");
+        }
         SpawnNextGroup( current_wave );
     }
 
@@ -75,11 +87,6 @@ public class Enemies : Node2D{
         Vector2 spawn_pos = GAME_MAP.GetGate(  group.GetSpawnGate() );
         SpawnEnemies( group.GetEnemies() , spawn_pos );
     }
-
-
-
-    
-    
 
 
 }

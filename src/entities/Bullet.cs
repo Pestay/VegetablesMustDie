@@ -4,7 +4,7 @@ using System;
 public class Bullet : Node2D
 {
     public float Range = 300;
-
+    float damage = 2000.0f;
     private float distanceTravelled = 0;
 
     public override void _Ready()
@@ -29,7 +29,7 @@ public class Bullet : Node2D
             return;
         else if(with.IsInGroup("Enemy")){
             Enemy enemy = (Enemy) with;
-            enemy.TakeDamage(10.0f);
+            enemy.TakeDamage(damage);
         }
         QueueFree();
     }
