@@ -82,10 +82,9 @@ public class Player : KinematicBody2D{
     void Shoot(){
         Vector2 CursorPos = GetLocalMousePosition();
         Bullet bullet = (Bullet)bulletScene.Instance();
-        bullet.Position = Position;
+        bullet.GlobalPosition = GlobalPosition;
         bullet.Rotation = CursorPos.Angle();
         GetParent().AddChild(bullet);
-        GetTree().SetInputAsHandled();
     }
 
 
