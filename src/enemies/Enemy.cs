@@ -19,7 +19,7 @@ public class Enemy : KinematicBody2D{
     EnemyFSM brain;
 
     [Signal]
-    delegate void Dead();
+    delegate void Dead(Enemy self);
 
 
 
@@ -119,8 +119,7 @@ public class Enemy : KinematicBody2D{
         health -= dmg;
         HEALTH_BAR.SetValue(health);
         if(health <= 0){
-            EmitSignal(nameof(Die));
-            QueueFree();
+            Die();
         }
     }
 
@@ -130,7 +129,8 @@ public class Enemy : KinematicBody2D{
     }
 
     public void Die(){
-        EmitSignal(nameof(Dead));
+        EmitSignal(nameof(Dead), this);
+        QueueFree();
     }
 
 

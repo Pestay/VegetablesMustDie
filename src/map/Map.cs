@@ -99,6 +99,14 @@ public class Map : Node2D{
 
     public Dictionary<int, Vector2> GetGates() => ENEMIES_GATES;
 
+    public Vector2 GetGate(int gate){
+        if(ENEMIES_GATES.ContainsKey(gate)){
+            return ENEMIES_GATES[gate];
+        }
+        GD.Print(" Map gate ", gate, " doesn't exist!");
+        return ENEMIES_GATES[gate];
+    }
+
     public Position2D GetPlayerSpawn() => PLAYER_SPAWN;
 
     public TileMap GetTileMap() => TILE_MAP;
