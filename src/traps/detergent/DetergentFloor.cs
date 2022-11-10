@@ -6,7 +6,7 @@ public class DetergentFloor : Area2D{
 
 
     PackedScene effect;
-    List<Enemy> enemies = new List<Enemy>();
+
     Dictionary<Enemy, SlowDownEffect> effect_by_enemy = new Dictionary<Enemy, SlowDownEffect>();
 
     public override void _Ready(){
@@ -17,14 +17,28 @@ public class DetergentFloor : Area2D{
     void _on_DetergentFloor_body_entered(Node2D body){
         if(body.IsInGroup("Enemy")){
             Enemy enemy = (Enemy) body;
-            enemy.AddPropertyEffect(effect);
-            if(!enemies.Contains(enemy)){
-                enemies.Add(enemy);
+
+            if(!effect_by_enemy.ContainsKey(enemy)){
+
+                SlowDownEffect new_effect = effect.Instance<SlowDownEffect>();
+                enemy.AddPropertyEffect(new_effect);
+                effect_by_enemy[enemy] = new_effect;
             }
         }
     }
 
 
+    void _on_DetergentFloor_body_exited(Node2D body){
+        if(body.IsInGroup("Enemy")){
+            Enemy enemy = (Enemy) body;
+
+            if(effect_by_enemy.ContainsKey(enemy)){
+                enemy.RemovePropertyEffect(effect_by_enemy[enemy]);
+                effect_by_enemy.Remove(enemy);
+            }
+        }
+
+    }
 
 
 }

@@ -27,8 +27,8 @@ public class EffectsManager : Node2D{
     }
 
 
-    public void CreateNewPropertyEffect(PackedScene effect_scene){
-        PropertyEffect new_effect = effect_scene.Instance<PropertyEffect>();
+    public void AddPropertyEffect(PropertyEffect new_effect){
+
         EffectsManager.PROPERTY_TYPE property = new_effect.GetPropertyType();
 
         if(!new_effect.CanStack()){ // Check if there are other effects
@@ -44,6 +44,12 @@ public class EffectsManager : Node2D{
         current_effects[property].Add(new_effect);
     }
 
+    public void RemovePropertyEffect(PropertyEffect effect){
+        EffectsManager.PROPERTY_TYPE property = effect.GetPropertyType();
+        current_effects[property].Remove(effect);
+
+    }
+
 
     public Vector2 ApplyEffectsForProperty(PROPERTY_TYPE type, Vector2 property){
         foreach( PropertyEffect effect in current_effects[type] ){
@@ -56,6 +62,7 @@ public class EffectsManager : Node2D{
     public int ApplyEffectsForProperty(PROPERTY_TYPE type, int property){
         return property;
     }
+    
     
 
 

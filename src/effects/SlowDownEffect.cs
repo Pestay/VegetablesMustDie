@@ -4,21 +4,14 @@ using System;
 
 public class SlowDownEffect : PropertyEffect{
 
-    
+
     float modifier = 0.5f;
-    Timer TIMER;
 
 
     SlowDownEffect(){
         can_stack = false;
         PropertyType = EffectsManager.PROPERTY_TYPE.Velocity;
         effect_name = "SlowDown";
-    }
-
-
-    public override void _Ready(){
-        TIMER = GetNode<Timer>("Timer");
-        TIMER.Start();
     }
 
 

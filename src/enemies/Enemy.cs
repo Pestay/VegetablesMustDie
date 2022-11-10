@@ -133,8 +133,12 @@ public class Enemy : KinematicBody2D{
         QueueFree();
     }
 
-    public void AddPropertyEffect(PackedScene effect){
-        EFFECTS_MANAGER.CreateNewPropertyEffect(effect);
+    public void AddPropertyEffect(PropertyEffect effect){
+        EFFECTS_MANAGER.AddPropertyEffect(effect);
+    }
+
+    public void RemovePropertyEffect(PropertyEffect effect){
+        EFFECTS_MANAGER.RemovePropertyEffect(effect);
     }
 
 
