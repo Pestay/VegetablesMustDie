@@ -73,9 +73,6 @@ public class Traps : Node2D{
     }
 
 
-    
-
-
     void DeleteTrapPreview(){
         if(IsInstanceValid(current_trap)){
             current_trap.QueueFree();

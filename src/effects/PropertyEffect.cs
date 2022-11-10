@@ -5,9 +5,9 @@ using System.Collections.Generic;
 public class PropertyEffect : Node{
     
 
-    public override void _Ready(){
-        
-    }
+    protected bool can_stack = false;
+    protected EffectsManager.PROPERTY_TYPE PropertyType;
+    protected string effect_name;
 
     public virtual Vector2 ApplyEffect(Vector2 property){
         return property;
@@ -17,6 +17,10 @@ public class PropertyEffect : Node{
         return property;
     }
 
+    public EffectsManager.PROPERTY_TYPE GetPropertyType() => PropertyType;
 
+    public bool CanStack() => can_stack;
+
+    public string GetEffectName() => effect_name;
 
 }

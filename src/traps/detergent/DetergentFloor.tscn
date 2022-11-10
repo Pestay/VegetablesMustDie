@@ -7,6 +7,7 @@
 extents = Vector2( 16, 16 )
 
 [node name="DetergentFloor" type="Area2D"]
+monitorable = false
 script = ExtResource( 2 )
 __meta__ = {
 "_editor_description_": "A detergent trap. Slow down the enemies"
@@ -19,3 +20,5 @@ centered = false
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 16, 16 )
 shape = SubResource( 1 )
+
+[connection signal="body_entered" from="." to="." method="_on_DetergentFloor_body_entered"]

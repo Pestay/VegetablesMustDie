@@ -23,7 +23,7 @@ public class TrapPreview : Node2D{
     public override void _Ready(){
         OBJECT_DETECTOR = GetNode<Area2D>("Area2D");
         TRAP_SPRITE = this.GetNode<Sprite>("Sprite");
-        
+        CheckValidPosition();
     }
 
 
@@ -81,7 +81,8 @@ public class TrapPreview : Node2D{
         if(valid_position){
             Node2D new_trap = trap_scene.Instance<Node2D>();
             new_trap.GlobalPosition = GlobalPosition;
-            EmitSignal(nameof(PlaceTrap), tile_map.WorldToMap( GetGlobalMousePosition()) );
+            
+            //EmitSignal(nameof(PlaceTrap), tile_map.WorldToMap( GetGlobalMousePosition()) );
             GetParent().AddChild(new_trap);
         }
     }

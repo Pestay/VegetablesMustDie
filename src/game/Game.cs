@@ -28,7 +28,7 @@ public class Game : Node2D{
         WaveStructs.Group enemies1 = new WaveStructs.Group(Enumerable.Repeat( enemy, 2).ToList(), 0); 
         WaveStructs.Group enemies2 = new WaveStructs.Group(Enumerable.Repeat( enemy, 5).ToList(), 0); 
         WaveStructs.Wave waves = new WaveStructs.Wave( new List<WaveStructs.Group>(){enemies1,enemies2} );
-        //ENEMIES.StartWave(waves);
+        ENEMIES.StartWave(waves);
 
 
         UpdateHP(health_points);
