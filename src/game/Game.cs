@@ -11,6 +11,7 @@ public class Game : Node2D{
     // Children
     Map GAME_MAP;
     Enemies ENEMIES;
+    GameHud GAME_HUD;
 
     // Game stats
     int health_points = 5;
@@ -19,6 +20,7 @@ public class Game : Node2D{
     public override void _Ready(){
         GAME_MAP = GetNode<Map>("Map");
         ENEMIES = GetNode<Enemies>("Enemies");
+        GAME_HUD = GetNode<GameHud>("GameHud");
 
         // Init nodes
         ENEMIES.Init(GAME_MAP);
@@ -29,9 +31,7 @@ public class Game : Node2D{
         WaveStructs.Group enemies2 = new WaveStructs.Group(Enumerable.Repeat( enemy, 5).ToList(), 0); 
         WaveStructs.Wave waves = new WaveStructs.Wave( new List<WaveStructs.Group>(){enemies1,enemies2} );
         ENEMIES.StartWave(waves);
-
-
-        UpdateHP(health_points);
+        GAME_HUD.UpdateHP(health_points);
     }
 
 
@@ -43,7 +43,8 @@ public class Game : Node2D{
 
     public void TakeDamage(int dmg){
         if(!is_game_over){
-            UpdateHP(health_points - dmg);
+            health_points -= dmg;
+            GAME_HUD.UpdateHP(health_points);
             if(health_points <= 0){
                 GameOver();   
             }
@@ -51,12 +52,7 @@ public class Game : Node2D{
         
     }
 
-    void UpdateHP(int new_hp){
-        health_points = new_hp;
-        Label label = GetNode<Label>("GameHud/Control/HBoxContainer/HealthPoints");
-        label.Text = health_points.ToString();
-        
-    }
+
 
     void _on_Map_EnemyReachGoal(){
         TakeDamage(1);
