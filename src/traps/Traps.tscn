@@ -34,5 +34,12 @@ margin_bottom = 67.0
 rect_min_size = Vector2( 64, 64 )
 text = "Table"
 
+[node name="Turret" type="Button" parent="BuildingMenu/Control/HBoxContainer"]
+margin_left = 148.0
+margin_right = 198.0
+margin_bottom = 67.0
+text = "Turret"
+
 [connection signal="pressed" from="BuildingMenu/Control/HBoxContainer/Detergent" to="." method="_on_Detergent_pressed"]
 [connection signal="pressed" from="BuildingMenu/Control/HBoxContainer/Table" to="." method="_on_Table_pressed"]
+[connection signal="pressed" from="BuildingMenu/Control/HBoxContainer/Turret" to="." method="_on_Turret_pressed"]

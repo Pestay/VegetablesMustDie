@@ -96,6 +96,8 @@ public class Traps : Node2D{
 
     }
 
-
+    void _on_Turret_pressed(){
+        CreateTrapPreview("Turret");
+    }
 
 }
