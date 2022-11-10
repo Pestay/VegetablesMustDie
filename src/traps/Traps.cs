@@ -80,8 +80,13 @@ public class Traps : Node2D{
     }
 
 
-    public void _OnPlaceTrap(Vector2 tile_pos){
-        MAP.SetNewBlock(tile_pos, 10);
+    public void _OnPlaceTrap(Vector2 place_pos , Trap trap){
+        trap.GlobalPosition = place_pos;
+        AddChild(trap);
+        if(trap.CanBlock()){
+            MAP.SetNewBlock(MAP.GetTileMap().WorldToMap( place_pos ), 10);
+        }
+
     }
 
 

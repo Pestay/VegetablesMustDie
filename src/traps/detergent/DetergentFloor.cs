@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public class DetergentFloor : Area2D{
+public class DetergentFloor : Trap{
 
 
     PackedScene effect;
@@ -14,7 +14,7 @@ public class DetergentFloor : Area2D{
     }
     
 
-    void _on_DetergentFloor_body_entered(Node2D body){
+    void _on_Detector_body_entered(Node2D body){
         if(body.IsInGroup("Enemy")){
             Enemy enemy = (Enemy) body;
 
@@ -28,7 +28,7 @@ public class DetergentFloor : Area2D{
     }
 
 
-    void _on_DetergentFloor_body_exited(Node2D body){
+    void _on_Detector_body_exited(Node2D body){
         if(body.IsInGroup("Enemy")){
             Enemy enemy = (Enemy) body;
 

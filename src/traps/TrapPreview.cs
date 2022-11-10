@@ -13,7 +13,7 @@ public class TrapPreview : Node2D{
 
     //Signals
 
-    [Signal] delegate void PlaceTrap(Vector2 tile_pos);
+    [Signal] delegate void PlaceTrap(Vector2 tile_pos, Node2D trap);
     
     
     public void Constructor(TileMap new_tilemap){
@@ -79,11 +79,11 @@ public class TrapPreview : Node2D{
 
     void PlaceNewTrap(){
         if(valid_position){
-            Node2D new_trap = trap_scene.Instance<Node2D>();
+            Trap new_trap = trap_scene.Instance<Trap>();
             new_trap.GlobalPosition = GlobalPosition;
             
-            //EmitSignal(nameof(PlaceTrap), tile_map.WorldToMap( GetGlobalMousePosition()) );
-            GetParent().AddChild(new_trap);
+            EmitSignal(nameof(PlaceTrap), GlobalPosition, new_trap );
+            //GetParent().AddChild(new_trap);
         }
     }
 

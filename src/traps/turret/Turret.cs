@@ -1,8 +1,7 @@
 using Godot;
 using System;
 
-public class Turret : Area2D
-{
+public class Turret : Trap{
 
     
     PackedScene bulletScene;

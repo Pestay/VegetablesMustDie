@@ -1,12 +1,17 @@
 using Godot;
 using System;
 
-public class WoodenBlock1x1 : StaticBody2D{
+public class WoodenBlock1x1 : Trap{
 
 
     const float MAX_HEALTH = 200.0f;
     float health = 200.0f;
     Sprite TABLE_SPRITE;
+
+    WoodenBlock1x1(){
+        can_block = true;
+        price = 100;
+    }
 
     public override void _Ready(){
         health = MAX_HEALTH;

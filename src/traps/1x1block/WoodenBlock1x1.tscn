@@ -6,14 +6,16 @@
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 16, 16 )
 
-[node name="WoodenBlock1x1" type="StaticBody2D"]
+[node name="WoodenTable" type="Node2D"]
 script = ExtResource( 2 )
 
-[node name="Sprite" type="Sprite" parent="."]
+[node name="WoodenBlock1x1" type="StaticBody2D" parent="."]
+
+[node name="Sprite" type="Sprite" parent="WoodenBlock1x1"]
 texture = ExtResource( 1 )
 centered = false
 hframes = 3
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WoodenBlock1x1"]
 position = Vector2( 16, 16 )
 shape = SubResource( 1 )
