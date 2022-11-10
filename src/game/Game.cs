@@ -63,6 +63,7 @@ public class Game : Node2D{
     }
 
     void _on_Enemies_WaveFinished(){
+        GD.Print(" FIIN!!");
         if(!is_game_over)
             Win();
     }
