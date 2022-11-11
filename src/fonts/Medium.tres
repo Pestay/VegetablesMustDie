@@ -1,8 +1,8 @@
 [gd_resource type="DynamicFont" load_steps=2 format=2]
 
-[sub_resource type="DynamicFontData" id=1]
+[sub_resource type="DynamicFontData" id=2]
 font_path = "res://src/fonts/GravityBold8.ttf"
 
 [resource]
 size = 22
-font_data = SubResource( 1 )
+font_data = SubResource( 2 )
