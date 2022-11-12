@@ -67,7 +67,7 @@ public class Traps : Node2D{
         // Get Trap data
         PackedScene scn = ResourceLoader.Load<PackedScene>(PREVIEWS_DATA.data[trap].Scene);
         Texture texture = ResourceLoader.Load<Texture>(PREVIEWS_DATA.data[trap].TexturePreview);
-        current_trap.SetTrap(texture, scn, new Vector2(1,1));
+        current_trap.SetTrap(texture, scn, new Vector2(1,1), trap);
         // Set wall 1x1 
         
     }
@@ -80,8 +80,9 @@ public class Traps : Node2D{
     }
 
 
-    public void _OnPlaceTrap(Vector2 place_pos , Trap trap){
+    public void _OnPlaceTrap(Vector2 place_pos , Trap trap, float rotation){
         trap.GlobalPosition = place_pos;
+        trap.RotationDegrees = rotation;
         AddChild(trap);
         if(trap.CanBlock()){
             MAP.SetNewBlock(MAP.GetTileMap().WorldToMap( place_pos ), 10);

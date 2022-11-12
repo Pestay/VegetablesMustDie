@@ -13,6 +13,7 @@ public class Turret : Trap{
     public override void _Ready()
     {
         bulletScene = GD.Load<PackedScene>("res://src/entities/Bullet.tscn");
+        this.GlobalPosition += new Vector2(16,16);
     }
 
     public override void _PhysicsProcess(float delta)
@@ -27,9 +28,9 @@ public class Turret : Trap{
     }
 
     void Shoot(){
-        Vector2 Front = new Vector2(0,1);
+        Vector2 Front = new Vector2(-Mathf.Sin(this.Rotation),Mathf.Cos(this.Rotation));
         Bullet bullet = (Bullet)bulletScene.Instance();
-        bullet.GlobalPosition = GlobalPosition + new Vector2(16,16);
+        bullet.GlobalPosition = GlobalPosition;
         bullet.Rotation = Front.Angle();
         GetParent().AddChild(bullet);
     }
