@@ -118,8 +118,6 @@ public class Enemy : KinematicBody2D{
 
 
     public void TakeDamage(float dmg){
-        Die();
-        return;
         health -= dmg;
         HEALTH_BAR.SetValue(health);
         EFFECTS.Play("TakeDamage");
