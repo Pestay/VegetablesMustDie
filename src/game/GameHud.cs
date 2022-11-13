@@ -8,7 +8,7 @@ public class GameHud : CanvasLayer{
 
     public override void _Ready(){
         HP_LABEL = GetNode<Label>("Hud/HBoxContainer/HealthPoints/HealthPoints");
-        MONEY_LABEL = GetNode<Label>("GameHud/Hud/HBoxContainer/Money/Money");
+        MONEY_LABEL = GetNode<Label>("Hud/HBoxContainer/Money/Money");
     }
 
     public void UpdateHP(int new_hp){

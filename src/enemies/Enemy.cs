@@ -8,6 +8,7 @@ using System.Text;
 public class Enemy : KinematicBody2D{
 
     AnimationPlayer ANIMATIONS;
+    AnimationPlayer EFFECTS;
     HealthBar HEALTH_BAR;
     EffectsManager EFFECTS_MANAGER;
     List<PathFindingCell> current_path = new List<PathFindingCell>();
@@ -27,6 +28,7 @@ public class Enemy : KinematicBody2D{
         enemy_sprite = GetNode<Sprite>("Sprite");
         brain = GetNode<EnemyFSM>("EnemyFSM");
         ANIMATIONS = GetNode<AnimationPlayer>("AnimationPlayer");
+        EFFECTS = GetNode<AnimationPlayer>("Effects");
         EFFECTS_MANAGER =  GetNode<EffectsManager>("EffectsManager");
         HEALTH_BAR = GetNode<HealthBar>("HealthBar");
         HEALTH_BAR.SetMaxValue(health);
@@ -116,11 +118,15 @@ public class Enemy : KinematicBody2D{
 
 
     public void TakeDamage(float dmg){
+        Die();
+        return;
         health -= dmg;
         HEALTH_BAR.SetValue(health);
+        EFFECTS.Play("TakeDamage");
         if(health <= 0){
             Die();
         }
+        
     }
 
     // Setters and Getters

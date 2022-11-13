@@ -22,7 +22,7 @@ public class Enemies : Node2D{
     Node2D SpawnEnemy(Vector2 spawn_pos, PackedScene enemy){
         Node2D new_enemy = enemy.Instance<Node2D>();
         new_enemy.GlobalPosition = spawn_pos;
-        AddChild(new_enemy);
+        AddChild(new_enemy); // < BUG!
         return new_enemy;
     }
 
