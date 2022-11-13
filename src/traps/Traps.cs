@@ -16,6 +16,8 @@ public class Traps : Node2D{
     TrapPreview current_trap = null;
     public bool in_building = false;
 
+    int current_money = 5000;
+
 
     public override void _Ready(){
         TRAP_PREVIEW = (PackedScene)ResourceLoader.Load("res://src/traps/TrapPreview.tscn");
@@ -87,7 +89,9 @@ public class Traps : Node2D{
             MAP.SetNewBlock(MAP.GetTileMap().WorldToMap( place_pos ), 10);
         }
 
+
     }
+
 
 
     void _on_Detergent_pressed(){
