@@ -10,6 +10,8 @@ public class TrapPreview : Node2D{
     bool valid_position = false;
     Area2D OBJECT_DETECTOR; // Check if the trap is not intefering with another traps
     int objects_detected = 0;
+    string trap_name;
+    float trap_rotation = 0;
 
     //Signals
 
@@ -29,14 +31,20 @@ public class TrapPreview : Node2D{
 
     public override void _Process(float delta){
         MoveTrapPreview();
+        if(Input.IsActionJustPressed("R"))
+        {
+            trap_rotation += 90;
+            this.RotationDegrees = trap_rotation;
+        }
         if(Input.IsActionJustPressed("left_click")){
             PlaceNewTrap();
         }
     }
 
 
-    public void SetTrap(Texture trap_texture, PackedScene trap, Vector2 size){
+    public void SetTrap(Texture trap_texture, PackedScene trap, Vector2 size, string name){
         trap_scene = trap;
+        trap_name = name;
         TRAP_SPRITE.Texture = trap_texture;
         TRAP_SPRITE.Frame = 0;
         TRAP_SPRITE.Hframes = 3;
@@ -47,7 +55,7 @@ public class TrapPreview : Node2D{
 
 
     void CheckValidPosition(){
-        if(objects_detected > 0){
+        if(objects_detected > 0 && trap_name != "Turret"){
             valid_position = false;
             TRAP_SPRITE.Modulate = new Color("#FF4500");
         }
@@ -82,7 +90,7 @@ public class TrapPreview : Node2D{
             Trap new_trap = trap_scene.Instance<Trap>();
             new_trap.GlobalPosition = GlobalPosition;
             
-            EmitSignal(nameof(PlaceTrap), GlobalPosition, new_trap );
+            EmitSignal(nameof(PlaceTrap), GlobalPosition, new_trap, trap_rotation );
             //GetParent().AddChild(new_trap);
         }
     }
