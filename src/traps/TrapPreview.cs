@@ -31,14 +31,23 @@ public class TrapPreview : Node2D{
 
     public override void _Process(float delta){
         MoveTrapPreview();
-        if(Input.IsActionJustPressed("R"))
-        {
-            trap_rotation += 90;
-            this.RotationDegrees = trap_rotation;
-        }
+        RotationInput();
         if(Input.IsActionJustPressed("left_click")){
             PlaceNewTrap();
         }
+    }
+
+
+    void RotationInput(){
+        if(Input.IsActionJustPressed("Q")){
+            trap_rotation -= 90;
+            this.RotationDegrees = trap_rotation;
+        }
+        if(Input.IsActionJustPressed("E")){
+            trap_rotation += 90;
+            this.RotationDegrees = trap_rotation;
+        }
+
     }
 
 
