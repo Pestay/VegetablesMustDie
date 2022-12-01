@@ -6,6 +6,8 @@ public class Turret : Trap{
     
     PackedScene bulletScene;
 
+    AudioStreamPlayer2D audioController;
+
     float reload_speed = 1.0f;
     float last_shot = 0.0f;
 
@@ -13,6 +15,8 @@ public class Turret : Trap{
     public override void _Ready()
     {
         bulletScene = GD.Load<PackedScene>("res://src/entities/Bullet.tscn");
+        audioController = GetNode<AudioStreamPlayer2D>("AudioStreamPlayer2D");
+        audioController.Stream = GD.Load<AudioStream>("res://src/traps/turret/bc_attack3.wav");
         this.GlobalPosition += new Vector2(16,16);
     }
 
@@ -30,8 +34,9 @@ public class Turret : Trap{
     void Shoot(){
         Vector2 Front = new Vector2(-Mathf.Sin(this.Rotation),Mathf.Cos(this.Rotation));
         Bullet bullet = (Bullet)bulletScene.Instance();
-        bullet.GlobalPosition = GlobalPosition;
+        bullet.GlobalPosition = GlobalPosition + Front*30.0f;
         bullet.Rotation = Front.Angle();
+        audioController.Play();
         GetParent().AddChild(bullet);
     }
 

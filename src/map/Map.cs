@@ -12,16 +12,16 @@ public class Map : Node2D{
     delegate void EnemyReachGoal();
 
 
-    TileMap TILE_MAP;
+    public TileMap TILE_MAP;
     Area2D ENEMY_GOAL;
     Dictionary<int, Vector2> ENEMIES_GATES = new Dictionary<int, Vector2>();
 
     Dictionary<Vector2, FlowMapCell> FLOW_MAP;
 
     Position2D PLAYER_SPAWN;
-    PathFinding PATH_FINDING;
+    public PathFinding PATH_FINDING;
     
-    int[,] map_matrix;
+    public int[,] map_matrix;
 
     public override void _Ready(){
         TILE_MAP = GetNode<TileMap>("TileMap");
