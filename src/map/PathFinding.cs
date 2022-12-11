@@ -28,12 +28,7 @@ public struct PathFindingCell{
 
 
 public class PathFinding : Node{
-
-
     // Data about cell
-    
-    
-
     public List<PathFindingCell> FindPath(Vector2 initial_pos, Vector2 goal, int[,] cells){
         bool blocked = false;
         Vector2 current;
@@ -229,3 +224,7 @@ public class PathFinding : Node{
 
 
 }
+
+
+
+

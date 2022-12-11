@@ -5,11 +5,16 @@ using System.Collections.Generic;
 
 // Establece el entorno del juego y entrega informacion sobre el entorno
 public class Map : Node2D{
-    [Signal]
-    delegate void MapUpdate();
 
-    [Signal]
-    delegate void EnemyReachGoal();
+    public struct Coord{
+        public int x;
+        public int y;
+    }
+
+
+    
+    [Signal] delegate void MapUpdate();  // Evento cuando el mapa se actualiza
+    [Signal] delegate void EnemyReachGoal(); // Cuando el enemigo alcanza la meta
 
 
     TileMap TILE_MAP;
@@ -22,8 +27,10 @@ public class Map : Node2D{
     PathFinding PATH_FINDING;
     
     int[,] map_matrix;
+    int[,] flow_field;
 
     public override void _Ready(){
+        // Inicializar el mapa
         TILE_MAP = GetNode<TileMap>("TileMap");
         ENEMY_GOAL = GetNode<Area2D>("Goal");
         PLAYER_SPAWN =GetNode<Position2D>("PlayerSpawn");
@@ -38,7 +45,10 @@ public class Map : Node2D{
 
         map_matrix = CreateMatrixMap();
         SetFlowMap();
+        FlowField flow = new FlowField();
+        flow_field = flow.GetFlowField(this);
     }
+
 
     // Create 2D array map filled with tile ids
     int[,] CreateMatrixMap(){
@@ -59,13 +69,49 @@ public class Map : Node2D{
             int x = (int) (tile_cell.x - map_offset.x);
             int y = (int) (tile_cell.y - map_offset.y);
             map_array[y,x] = TILE_MAP.GetCell((int) tile_cell.x,(int) tile_cell.y);
-
         }
-
     return map_array;
     }
 
-    //public int[,] GetMatrixMap() => map_matrix;
+    public int[,] GetMatrixMap() => map_matrix;
+
+    public int[,] GetFlowField() => flow_field;
+
+    public bool CoordIsWall(Coord coord){
+        if(map_matrix[coord.y,coord.x] == 0){
+            return true;
+        }
+        return false;
+    }
+
+
+    public Coord GetGoalCoord(){
+        Vector2 pos = TILE_MAP.WorldToMap(ENEMY_GOAL.GlobalPosition);
+        Coord coord = new Coord(){ x = (int) pos.x, y = (int)  pos.y };
+        return coord;
+    }
+
+
+    
+    public List<Coord> GetNeighbours(int x, int y, int[,] map){
+        List<Coord> neighbours = new List<Coord>();
+        int length_y = map.GetLength(0);
+        int length_x = map.GetLength(1);
+        if((x - 1< length_x) && (x -1 >= 0)){
+            neighbours.Add( new Coord(){x = x - 1, y = y});
+        }
+        if((x + 1< length_x) && (x + 1 >= 0)){
+            neighbours.Add( new Coord(){x = x + 1, y = y});
+        }
+        if((y - 1< length_y) && (y -1 >= 0)){
+            neighbours.Add( new Coord(){x = x , y = y - 1});
+        }
+        if((y + 1< length_y) && (y +1 >= 0)){
+            neighbours.Add( new Coord(){x = x , y = y + 1});
+        }
+        return neighbours;
+    }
+
 
     // Add a trap to map matrix
     public void SetNewBlock(Vector2 tile_pos, int block_weight){
@@ -110,7 +156,6 @@ public class Map : Node2D{
     public Position2D GetPlayerSpawn() => PLAYER_SPAWN;
 
     public TileMap GetTileMap() => TILE_MAP;
-
 
     public List<PathFindingCell> GetPathToGoal(Vector2 from){
         List<PathFindingCell> result = PATH_FINDING.FindPath( TILE_MAP.WorldToMap(from), TILE_MAP.WorldToMap(ENEMY_GOAL.GlobalPosition), map_matrix);
