@@ -62,6 +62,8 @@ public class EnemyFSM : Node
     protected virtual void OnEnterState(STATES out_state, STATES in_state){
         switch(in_state){
             case STATES.WALK:
+                
+                parent.current_destination = parent.GlobalPosition;
                 parent.WalkAnimation();
                 break;
             case STATES.IDLE:
@@ -79,7 +81,8 @@ public class EnemyFSM : Node
     protected virtual void DoAction(float delta, STATES state){ 
         switch(state){
             case STATES.WALK:
-                parent.FollowPath(delta);
+                //parent.FollowPath(delta);
+                parent.MoveToGoal(delta);
                 break;
         }
     }

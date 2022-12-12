@@ -1,7 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
-
+using System.Linq;
 
 // Establece el entorno del juego y entrega informacion sobre el entorno
 public class Map : Node2D{
@@ -11,8 +11,6 @@ public class Map : Node2D{
         public int y;
     }
 
-
-    
     [Signal] delegate void MapUpdate();  // Evento cuando el mapa se actualiza
     [Signal] delegate void EnemyReachGoal(); // Cuando el enemigo alcanza la meta
 
@@ -33,7 +31,7 @@ public class Map : Node2D{
         // Inicializar el mapa
         TILE_MAP = GetNode<TileMap>("TileMap");
         ENEMY_GOAL = GetNode<Area2D>("Goal");
-        PLAYER_SPAWN =GetNode<Position2D>("PlayerSpawn");
+        PLAYER_SPAWN = GetNode<Position2D>("PlayerSpawn");
         PATH_FINDING = GetNode<PathFinding>("PathFinding");
 
         int loop = 0;
@@ -44,9 +42,7 @@ public class Map : Node2D{
         
 
         map_matrix = CreateMatrixMap();
-        SetFlowMap();
-        FlowField flow = new FlowField();
-        flow_field = flow.GetFlowField(this);
+        flow_field = GenerateFlowField(this);
     }
 
 
@@ -84,6 +80,11 @@ public class Map : Node2D{
         return false;
     }
 
+    public bool CoordIsObstacle(Coord coord){
+
+        return false;
+    }
+
 
     public Coord GetGoalCoord(){
         Vector2 pos = TILE_MAP.WorldToMap(ENEMY_GOAL.GlobalPosition);
@@ -91,12 +92,20 @@ public class Map : Node2D{
         return coord;
     }
 
+    public Coord GlobalToCoord(Vector2 global_pos){
+        Vector2 pos = TILE_MAP.WorldToMap(global_pos);
+    
+        Coord r_coord = new Coord(){x = (int) pos.x, y = (int) pos.y};
+        return r_coord;
+    }
+
 
     
-    public List<Coord> GetNeighbours(int x, int y, int[,] map){
+    public List<Coord> GetNeighbours(int x, int y){
+        
         List<Coord> neighbours = new List<Coord>();
-        int length_y = map.GetLength(0);
-        int length_x = map.GetLength(1);
+        int length_y = map_matrix.GetLength(0);
+        int length_x = map_matrix.GetLength(1);
         if((x - 1< length_x) && (x -1 >= 0)){
             neighbours.Add( new Coord(){x = x - 1, y = y});
         }
@@ -109,9 +118,17 @@ public class Map : Node2D{
         if((y + 1< length_y) && (y +1 >= 0)){
             neighbours.Add( new Coord(){x = x , y = y + 1});
         }
+        
         return neighbours;
     }
 
+
+    public List<Coord> GetNeighboursFromGlobal(Vector2 global_pos){
+        Vector2 tile_pos = TILE_MAP.WorldToMap(global_pos);
+        List<Coord> neighbours = GetNeighbours( (int) tile_pos.x, (int) tile_pos.y);
+        return neighbours;
+    }
+    
 
     // Add a trap to map matrix
     public void SetNewBlock(Vector2 tile_pos, int block_weight){
@@ -126,6 +143,15 @@ public class Map : Node2D{
         //foreach(Vector2 key in FLOW_MAP.Keys)
         //    GD.Print(key);
     }
+
+    public Vector2 CoordToGlobal(Coord coord){
+        return ( TILE_MAP.MapToWorld( new Vector2(coord.x,coord.y) ) + new Vector2(16,16) );
+    }
+
+    public int GetCoordFlowValue(Coord coord){
+        return flow_field[coord.y, coord.x];
+    }
+
 
     public List<PathFindingCell> GetPathFromFlowMap(Vector2 from)
     {
@@ -174,5 +200,42 @@ public class Map : Node2D{
     void _on_Goal_EnemyReachGoal(){
         EmitSignal( nameof(EnemyReachGoal) );
     }
+
+
+
+    public int[,] GenerateFlowField(Map map){
+        
+        // Generate djikstra grid, set all cells to null and wall to infinty
+        int length_y = map.GetMatrixMap().GetLength(0);
+        int length_x = map.GetMatrixMap().GetLength(1);
+        int[,] flow_map = new int[length_y,length_x];
+        for(int y = 0; y < length_y; y++){
+            for(int x = 0; x < length_x; x++){
+                flow_map[y,x] =  999;
+            }
+        }
+
+        List<Coord> queue = new List<Coord>();
+        Dictionary<int, int> distance = new Dictionary<int, int>();
+        Coord goal = map.GetGoalCoord() ;
+        queue.Add( goal);
+        distance[ goal.y*length_x + goal.x ] = 0;
+        flow_map[ goal.y, goal.x] = 0;
+        while(queue.Count > 0){
+            Coord current = queue.First();
+            queue.RemoveAt(0);
+            foreach( Map.Coord neighbour in map.GetNeighbours(current.x, current.y)){
+                int coord_1d = neighbour.y*length_x + neighbour.x;
+                if( !distance.ContainsKey(coord_1d) && !map.CoordIsWall(neighbour)){
+                    queue.Add(neighbour);
+                    distance[coord_1d] = 1 + distance[ current.y*length_x + current.x ];
+                    flow_map[ neighbour.y, neighbour.x] = 1 + distance[ current.y*length_x + current.x ];
+                }
+            }
+        }
+
+        DebugUtils.Print2DArray(flow_map);
+        return flow_map;
+	}
 
 }

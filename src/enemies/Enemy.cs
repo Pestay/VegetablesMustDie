@@ -4,6 +4,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+
+
 // Enemy for testing purposes
 public class Enemy : KinematicBody2D{
 
@@ -18,6 +20,7 @@ public class Enemy : KinematicBody2D{
     Sprite enemy_sprite;
     float health = 100;
     EnemyFSM brain;
+    public Map enviroment;
 
     [Signal]
     delegate void Dead(Enemy self);
@@ -62,7 +65,57 @@ public class Enemy : KinematicBody2D{
     }
 
     // --- Actions
+    struct EnvironmentObservation{
+        public Vector2 global_pos;
+        public int value;
+        public bool is_obstacle;
+    }
 
+    // Return what the agent see in the current position
+    List<EnvironmentObservation> GetObservations(){
+        
+        List<Map.Coord> neighbours = enviroment.GetNeighboursFromGlobal(this.GlobalPosition);
+        List<EnvironmentObservation> observations = new List<EnvironmentObservation>();
+        Map.Coord pivot = enviroment.GlobalToCoord(this.GlobalPosition);
+        foreach(Map.Coord neighbour in neighbours){
+            
+            EnvironmentObservation new_observation = new EnvironmentObservation();
+            new_observation.global_pos = enviroment.CoordToGlobal(neighbour); 
+            new_observation.is_obstacle = enviroment.CoordIsObstacle(neighbour);
+            new_observation.value = enviroment.GetCoordFlowValue(neighbour);
+            observations.Add(new_observation);
+            
+        }
+        
+        return observations;
+    }
+
+
+    public Vector2 current_destination = new Vector2(Int32.MaxValue, Int32.MaxValue);
+    // Moves to goal following the current flow field map
+    public void MoveToGoal(float delta){
+        // If is near to the destination
+        if(current_destination.DistanceSquaredTo(this.GlobalPosition) < 32){ // < 8*8 (1/4 of tile)
+            Vector2 next_pos = this.GlobalPosition;
+            int min_value = Int32.MaxValue;
+            List<EnvironmentObservation> observations = GetObservations();
+            
+            foreach(EnvironmentObservation observation in observations){
+                
+                if(observation.value < min_value){
+                    
+                    next_pos = observation.global_pos;
+                    min_value = observation.value;
+                }
+                
+            }
+            //
+            current_destination = next_pos;
+            
+        }
+        MoveTo(delta, current_destination);
+    }
+    
 
     // Follow a set of points
     public void FollowPath(float delta){
@@ -100,6 +153,7 @@ public class Enemy : KinematicBody2D{
 
     // --- Checkers (Transitions)
     public bool HasReachTarget(){
+        return false;
         if(current_path.Count <= 0){
             return true;
         }
