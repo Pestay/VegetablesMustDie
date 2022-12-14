@@ -114,7 +114,6 @@ custom_styles/normal = SubResource( 5 )
 text = "Exit"
 
 [node name="Paralelo" type="RichTextLabel" parent="."]
-visible = false
 margin_left = 19.0
 margin_top = 423.0
 margin_right = 155.0
@@ -124,7 +123,6 @@ custom_fonts/mono_font = SubResource( 1 )
 text = "Paralelo 1"
 
 [node name="Assets" type="RichTextLabel" parent="."]
-visible = false
 margin_left = 19.0
 margin_top = 449.0
 margin_right = 248.0
@@ -136,7 +134,6 @@ text = "Assets usados:
 "
 
 [node name="Creadores" type="RichTextLabel" parent="."]
-visible = false
 margin_left = 18.0
 margin_top = 357.0
 margin_right = 172.0

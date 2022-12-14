@@ -110,4 +110,8 @@ public class Traps : Node2D{
         CreateTrapPreview("Turret");
     }
 
+    void _on_Spikes_pressed(){
+        CreateTrapPreview("Spikes");
+    }
+
 }

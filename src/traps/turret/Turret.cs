@@ -16,7 +16,7 @@ public class Turret : Trap{
     {
         bulletScene = GD.Load<PackedScene>("res://src/entities/Bullet.tscn");
         audioController = GetNode<AudioStreamPlayer2D>("AudioStreamPlayer2D");
-        audioController.Stream = GD.Load<AudioStream>("res://src/traps/turret/bc_attack3.wav");
+        audioController.Stream = GD.Load<AudioStream>("res://src/traps/turret/bubble_1.wav");
         this.GlobalPosition += new Vector2(16,16);
     }
 

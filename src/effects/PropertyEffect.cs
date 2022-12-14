@@ -17,6 +17,10 @@ public class PropertyEffect : Node{
         return property;
     }
 
+    public virtual float ApplyEffect(float property){
+        return property;
+    }
+
     public EffectsManager.PROPERTY_TYPE GetPropertyType() => PropertyType;
 
     public bool CanStack() => can_stack;

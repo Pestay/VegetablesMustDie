@@ -4,18 +4,19 @@
 [ext_resource path="res://src/traps/1x1block/WoodenBlock1x1.cs" type="Script" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 16, 16 )
+extents = Vector2( 16.25, 15.875 )
 
 [node name="WoodenTable" type="Node2D"]
 script = ExtResource( 2 )
 
 [node name="WoodenBlock1x1" type="StaticBody2D" parent="."]
+position = Vector2( 16, 16 )
 
 [node name="Sprite" type="Sprite" parent="WoodenBlock1x1"]
 texture = ExtResource( 1 )
 centered = false
+offset = Vector2( -16, -16 )
 hframes = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WoodenBlock1x1"]
-position = Vector2( 16, 16 )
 shape = SubResource( 1 )

@@ -13,6 +13,7 @@ public class TrapPreview : Node2D{
     Area2D OBJECT_DETECTOR; // Check if the trap is not intefering with another traps
     int objects_detected = 0;
     bool valid_wall = false;
+    bool turret_in_the_way = false;
     string trap_name;
     float trap_rotation = 0;
     int[,] map_matrix;
@@ -74,7 +75,7 @@ public class TrapPreview : Node2D{
     void CheckValidPosition(){
         Vector2 pos = tile_map.WorldToMap(GlobalPosition);
         pos = InsideMatrixCheck(pos);
-        if(MAP.TILE_MAP.GetCell((int)pos.x,(int)pos.y) == 0)
+        if(MAP.TILE_MAP.GetCell((int)pos.x,(int)pos.y) == 0 && !turret_in_the_way)
         {
             foreach (Vector2 neighbour in PATH_FINDING.Neighbours(pos, map_matrix))
             {
@@ -95,27 +96,35 @@ public class TrapPreview : Node2D{
         if(trap_name == "Turret" && valid_wall) {
             valid_position = true;
             TRAP_SPRITE.Modulate = new Color("#FFFFFF");
-        } else if (objects_detected > 0) {
+        } else if (objects_detected > 1) {
             valid_position = false;
             TRAP_SPRITE.Modulate = new Color("#FF4500");
         } else if (trap_name != "Turret") {
             valid_position = true;
             TRAP_SPRITE.Modulate = new Color("#FFFFFF");
         } else {
-            valid_position = false;
-            TRAP_SPRITE.Modulate = new Color("#FF4500");
+            valid_position = true;
+            TRAP_SPRITE.Modulate = new Color("#FFFFFF");
         }
     }
 
 
     public void _OnArea2DBodyEntered(Node body){
         objects_detected += 1;
+        GD.Print(body);
+        if(body.IsInGroup("Turret")) {
+            turret_in_the_way = true;
+        }
         CheckValidPosition();
     }
 
 
     public void _OnArea2DBodyExited(Node body){
         objects_detected -= 1;
+        if(body.IsInGroup("Turret")) {
+            turret_in_the_way = false;
+        }
+        valid_wall = false;
         CheckValidPosition();
     }
 
