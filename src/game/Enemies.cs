@@ -13,10 +13,17 @@ public class Enemies : Node2D{
     Map GAME_MAP;
     WaveStructs.Wave current_wave;
     List<Enemy> current_enemies = new List<Enemy>(); //list of enemies in node
+    int enemies_left = 0;
+    GameHud GAME_HUD;
 
 
     public void Init(Map game_map){
         GAME_MAP = game_map;
+        
+    }
+
+    public override void _Ready(){
+        GAME_HUD = GetNode<GameHud>("../GameHud");
     }
 
     Enemy SpawnEnemy(Vector2 spawn_pos, PackedScene enemy){
@@ -68,11 +75,17 @@ public class Enemies : Node2D{
                 EmitSignal(nameof(WaveFinished));
             }
         }
+
+        enemies_left -= 1;
+        GAME_HUD.UpdateEnemiesLeft(enemies_left);
     }
 
 
     // Init new wave
     public void StartWave(WaveStructs.Wave wave){
+        enemies_left = wave.GetTotalEnemies();
+        GAME_HUD.UpdateEnemiesLeft( enemies_left);
+
         // Delete current enemies
         GD.Print("Starting new wave");
         current_wave = wave;
@@ -80,7 +93,9 @@ public class Enemies : Node2D{
             GD.Print(" Wave empty!! try to put some group of enemies ");
         }
         SpawnNextGroup( current_wave );
+        
     }
+
 
 
     void SpawnNextGroup(WaveStructs.Wave wave){

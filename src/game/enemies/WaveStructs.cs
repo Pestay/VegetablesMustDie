@@ -43,6 +43,15 @@ namespace WaveStructs{
             }
             return false;
         }
-}
+
+        public int GetTotalEnemies(){
+            int total_enemies = 0;
+            foreach(Group group in wave_enemies){
+                total_enemies += group.GetEnemies().Count;
+            }
+            return total_enemies;
+        }
+
+    }
     
 }
