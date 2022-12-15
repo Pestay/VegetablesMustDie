@@ -17,10 +17,15 @@ public class Player : KinematicBody2D{
 
     PackedScene bulletScene;
 
+    AudioStreamPlayer2D AUDIO_CONTROLLER;
+
+
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
         bulletScene = GD.Load<PackedScene>("res://src/entities/Bullet.tscn");
+        AUDIO_CONTROLLER = GetNode<AudioStreamPlayer2D>("AudioStreamPlayer2D");
+        AUDIO_CONTROLLER.Stream = GD.Load<AudioStream>("res://src/player/shoot.wav");
         
         PLAYER_SPRITE = GetNode<Sprite>("Sprite");
 
@@ -80,6 +85,7 @@ public class Player : KinematicBody2D{
     }
 
     void Shoot(){
+        AUDIO_CONTROLLER.Play();
         Vector2 CursorPos = GetLocalMousePosition();
         Bullet bullet = (Bullet)bulletScene.Instance();
         bullet.GlobalPosition = GlobalPosition;

@@ -130,6 +130,10 @@ position = Vector2( 463, 79 )
 z_index = 1
 speed = 100
 
+[node name="Music" type="AudioStreamPlayer2D" parent="."]
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+
 [connection signal="EnemyReachGoal" from="Map" to="." method="_on_Map_EnemyReachGoal"]
 [connection signal="MapUpdate" from="Map" to="Enemies" method="_on_Map_MapUpdate"]
 [connection signal="WaveFinished" from="Enemies" to="." method="_on_Enemies_WaveFinished"]

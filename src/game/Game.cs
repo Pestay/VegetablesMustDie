@@ -12,6 +12,8 @@ public class Game : Node2D{
     Map GAME_MAP;
     Enemies ENEMIES;
     GameHud GAME_HUD;
+    AudioStreamPlayer2D AUDIO_CONTROLLER;
+    AudioStreamPlayer2D MUSIC_CONTROLLER;
 
     // Game stats
     int health_points = 5;
@@ -21,6 +23,12 @@ public class Game : Node2D{
         GAME_MAP = GetNode<Map>("Map");
         ENEMIES = GetNode<Enemies>("Enemies");
         GAME_HUD = GetNode<GameHud>("GameHud");
+        MUSIC_CONTROLLER = GetNode<AudioStreamPlayer2D>("Music");
+        MUSIC_CONTROLLER.Stream = GD.Load<AudioStream>("res://src/game/combat.mp3");
+        MUSIC_CONTROLLER.Play();
+        AUDIO_CONTROLLER = GetNode<AudioStreamPlayer2D>("AudioStreamPlayer2D");
+        AUDIO_CONTROLLER.Stream = GD.Load<AudioStream>("res://src/game/Alarm_01.wav");
+        
 
         // Init nodes
         ENEMIES.Init(GAME_MAP);
@@ -56,6 +64,7 @@ public class Game : Node2D{
 
     void _on_Map_EnemyReachGoal(){
         TakeDamage(1);
+        AUDIO_CONTROLLER.Play();
     }
 
     void _on_Enemies_WaveFinished(){
@@ -66,6 +75,8 @@ public class Game : Node2D{
 
 
     async void GameOver(){
+        AUDIO_CONTROLLER.Stream = GD.Load<AudioStream>("res://src/game/lose.mp3");
+        AUDIO_CONTROLLER.Play();
         is_game_over = true;
         Control game_over = GetNode<Control>("GameHud/GameOver");
         game_over.Visible = true;
@@ -75,6 +86,8 @@ public class Game : Node2D{
 
 
     async void Win(){
+        AUDIO_CONTROLLER.Stream = GD.Load<AudioStream>("res://src/game/win.mp3");
+        AUDIO_CONTROLLER.Play();
         Control win = GetNode<Control>("GameHud/Victory");
         win.Visible = true;
         await ToSignal(GetTree().CreateTimer(3), "timeout");
