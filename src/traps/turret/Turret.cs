@@ -20,6 +20,12 @@ public class Turret : Trap{
         this.GlobalPosition += new Vector2(16,16);
     }
 
+    Turret(){
+        can_block = false;
+        only_wall = true;
+        price = 100;
+    }
+
     public override void _PhysicsProcess(float delta)
     {   
         last_shot += delta;
