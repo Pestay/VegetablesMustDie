@@ -59,6 +59,14 @@ public class Game : Node2D{
         WaveStructs.Wave wave2 = new WaveStructs.Wave( new List<WaveStructs.Group>(){enemies21,enemies22,enemies23} );
         total_waves.Add(wave2);
 
+        //THIRD WAVE
+
+        WaveStructs.Group enemies31 = new WaveStructs.Group(Enumerable.Repeat( enemy, 20).ToList(), 0); 
+        WaveStructs.Group enemies32 = new WaveStructs.Group(Enumerable.Repeat( enemy, 30).ToList(), 0); 
+        WaveStructs.Group enemies33 = new WaveStructs.Group(Enumerable.Repeat( enemy, 40).ToList(), 0); 
+        WaveStructs.Wave wave3 = new WaveStructs.Wave( new List<WaveStructs.Group>(){enemies31,enemies32,enemies33} );
+        total_waves.Add(wave3);
+
         StartTimeBetweenWaves();
         GAME_HUD.UpdateHP(health_points);
     }

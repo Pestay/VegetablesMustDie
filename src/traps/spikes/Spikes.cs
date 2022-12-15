@@ -27,7 +27,7 @@ public class Spikes : Trap
         if(body.IsInGroup("Enemy")){
             Enemy enemy = (Enemy) body;
             enemy.inSpike = true;
-            enemy.spikeDmg = 5;
+            enemy.spikeDmg = 15;
             enemy.dotReload = 1.5f;
             enemy.lastDot = 1.5f;
         }

@@ -24,7 +24,7 @@ public class Enemy : KinematicBody2D{
     float max_speed = 50;
     public float damage = 20.0f;
     Sprite enemy_sprite;
-    float health = 100;
+    float health = 300;
     int enemy_value = 80;
     EnemyFSM brain;
     public Map enviroment;

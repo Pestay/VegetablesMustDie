@@ -19,6 +19,7 @@ public class Player : KinematicBody2D{
 
     AudioStreamPlayer2D AUDIO_CONTROLLER;
 
+    bool can_shoot = true;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -69,6 +70,10 @@ public class Player : KinematicBody2D{
         if (Input.IsActionPressed("up"))
             velocity.y -= 1;
 
+        if(Input.IsActionJustPressed("B")){
+            can_shoot = !can_shoot;
+        }
+
         velocity = velocity.Normalized() * speed;
     }
 
@@ -85,12 +90,16 @@ public class Player : KinematicBody2D{
     }
 
     void Shoot(){
-        AUDIO_CONTROLLER.Play();
-        Vector2 CursorPos = GetLocalMousePosition();
-        Bullet bullet = (Bullet)bulletScene.Instance();
-        bullet.GlobalPosition = GlobalPosition;
-        bullet.Rotation = CursorPos.Angle();
-        GetParent().AddChild(bullet);
+        if(can_shoot){
+
+       
+            AUDIO_CONTROLLER.Play();
+            Vector2 CursorPos = GetLocalMousePosition();
+            Bullet bullet = (Bullet)bulletScene.Instance();
+            bullet.GlobalPosition = GlobalPosition;
+            bullet.Rotation = CursorPos.Angle();
+            GetParent().AddChild(bullet);
+         }
     }
 
 

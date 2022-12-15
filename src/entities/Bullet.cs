@@ -4,7 +4,7 @@ using System;
 public class Bullet : Node2D
 {
     public float Range = 300;
-    float damage = 2000.0f;
+    float damage = 20.0f;
     private float distanceTravelled = 0;
 
     public override void _Ready()
