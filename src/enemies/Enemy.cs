@@ -73,7 +73,6 @@ public class Enemy : KinematicBody2D{
 
     // Return what the agent see in the current position
     List<EnvironmentObservation> GetObservations(){
-        
         List<Map.Coord> neighbours = enviroment.GetNeighboursFromGlobal(this.GlobalPosition);
         List<EnvironmentObservation> observations = new List<EnvironmentObservation>();
         Map.Coord pivot = enviroment.GlobalToCoord(this.GlobalPosition);
@@ -90,7 +89,7 @@ public class Enemy : KinematicBody2D{
         return observations;
     }
 
-
+    EnvironmentObservation selected_cell;
     public Vector2 current_destination = new Vector2(Int32.MaxValue, Int32.MaxValue);
     // Moves to goal following the current flow field map
     public void MoveToGoal(float delta){
@@ -103,7 +102,6 @@ public class Enemy : KinematicBody2D{
             foreach(EnvironmentObservation observation in observations){
                 
                 if(observation.value < min_value){
-                    
                     next_pos = observation.global_pos;
                     min_value = observation.value;
                 }
@@ -131,6 +129,9 @@ public class Enemy : KinematicBody2D{
             
         }
     }
+
+
+    public bool SelectedCellIsObstacle() => selected_cell.is_obstacle;
 
     // Animations
 

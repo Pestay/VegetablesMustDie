@@ -47,6 +47,7 @@ public class EnemyFSM : Node
                 if(!parent.HasReachTarget()){
                     return STATES.WALK;
                 }
+                
                 break;
             case STATES.ATTACK:
                 if(!parent.IsBlocked()){

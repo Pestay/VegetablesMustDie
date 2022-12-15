@@ -27,6 +27,12 @@ public class Map : Node2D{
     int[,] map_matrix;
     int[,] flow_field;
 
+
+    public override void _Process(float delta){
+        if(Input.IsActionJustPressed("ui_accept")){
+            DebugUtils.Print2DArray(flow_field);
+        }
+    }
     public override void _Ready(){
         // Inicializar el mapa
         TILE_MAP = GetNode<TileMap>("TileMap");
@@ -41,13 +47,13 @@ public class Map : Node2D{
         }
         
 
-        map_matrix = CreateMatrixMap();
+        map_matrix = CreateCostMatrix();
         flow_field = GenerateFlowField(this);
     }
 
 
     // Create 2D array map filled with tile ids
-    int[,] CreateMatrixMap(){
+    int[,] CreateCostMatrix(){
         //Initialize map array
         Godot.Vector2 map_size = TILE_MAP.GetUsedRect().Size;
         int[,] map_array = new int[(int) map_size.y, (int) map_size.x];
@@ -64,14 +70,19 @@ public class Map : Node2D{
         foreach(Vector2 tile_cell in tiles_coordinates){
             int x = (int) (tile_cell.x - map_offset.x);
             int y = (int) (tile_cell.y - map_offset.y);
-            map_array[y,x] = TILE_MAP.GetCell((int) tile_cell.x,(int) tile_cell.y);
+            int cell_id = TILE_MAP.GetCell((int) tile_cell.x,(int) tile_cell.y);
+            if(cell_id == 0){
+                map_array[y,x] = 9999;
+            }else{
+                map_array[y,x] = 1;
+            }
+
+            
         }
     return map_array;
     }
 
     public int[,] GetMatrixMap() => map_matrix;
-
-    public int[,] GetFlowField() => flow_field;
 
     public bool CoordIsWall(Coord coord){
         if(map_matrix[coord.y,coord.x] == 0){
@@ -81,7 +92,9 @@ public class Map : Node2D{
     }
 
     public bool CoordIsObstacle(Coord coord){
-
+        if(map_matrix[coord.y, coord.x] >= 10 && !CoordIsWall(coord)){
+            return true;            
+        }
         return false;
     }
 
@@ -132,10 +145,11 @@ public class Map : Node2D{
 
     // Add a trap to map matrix
     public void SetNewBlock(Vector2 tile_pos, int block_weight){
-        map_matrix[(int) tile_pos.y, (int) tile_pos.x] = 10; // CHANGE THISS!!!
+        map_matrix[(int) tile_pos.y, (int) tile_pos.x] = 50; // ENCONTRAR UN PESO RELATIVO AL TAMANO DEL MAPA
+        flow_field = GenerateFlowField(this);
+        GD.Print(" NEW BLOCK");
         // Emit signal map update
         EmitSignal(nameof(MapUpdate));
-        
     }
 
     public void SetFlowMap() {
@@ -202,39 +216,67 @@ public class Map : Node2D{
     }
 
 
+    int TwoDimensionToOne(Coord coord, int length_x){
+        return coord.y*length_x + coord.x;
+    }
+
 
     public int[,] GenerateFlowField(Map map){
         
-        // Generate djikstra grid, set all cells to null and wall to infinty
+        // Get the dimensions of the cost map
         int length_y = map.GetMatrixMap().GetLength(0);
         int length_x = map.GetMatrixMap().GetLength(1);
+
+        // Create a initial 2D matrix filled with 999
         int[,] flow_map = new int[length_y,length_x];
         for(int y = 0; y < length_y; y++){
             for(int x = 0; x < length_x; x++){
-                flow_map[y,x] =  999;
+                flow_map[y,x] =  9999;
             }
         }
 
-        List<Coord> queue = new List<Coord>();
+        List<int> queue = new List<int>();
         Dictionary<int, int> distance = new Dictionary<int, int>();
         Coord goal = map.GetGoalCoord() ;
-        queue.Add( goal);
-        distance[ goal.y*length_x + goal.x ] = 0;
+        
+
+        // Set goal node cost to 0
+        //distance[ goal.y*length_x + goal.x ] = 0;
         flow_map[ goal.y, goal.x] = 0;
+        queue.Add( goal.y*length_x + goal.x );
+
+
+
+        // While queue is not empty
         while(queue.Count > 0){
-            Coord current = queue.First();
+            // Get the next node in the queue
+            int current_node_id = queue.First();
+
+            int current_node_x = current_node_id%length_x;
+            int current_node_y = current_node_id/length_x;
+
             queue.RemoveAt(0);
-            foreach( Map.Coord neighbour in map.GetNeighbours(current.x, current.y)){
-                int coord_1d = neighbour.y*length_x + neighbour.x;
-                if( !distance.ContainsKey(coord_1d) && !map.CoordIsWall(neighbour)){
-                    queue.Add(neighbour);
-                    distance[coord_1d] = 1 + distance[ current.y*length_x + current.x ];
-                    flow_map[ neighbour.y, neighbour.x] = 1 + distance[ current.y*length_x + current.x ];
+
+            // Iterate through each neighbour of the current_node
+            List<Coord> neighbours = map.GetNeighbours(current_node_x, current_node_y);
+            foreach( Map.Coord neighbour in neighbours){
+                // If the neighbour is not a wall
+                if(map_matrix[neighbour.y, neighbour.x] < 9999){
+
+                int end_node_cost = flow_map[current_node_y, current_node_x] + map_matrix[neighbour.y, neighbour.x];
+                if((end_node_cost < flow_map[neighbour.y, neighbour.x])  ){
+                    if( !queue.Contains( neighbour.y*length_x + neighbour.x)  ){
+                        queue.Add( neighbour.y*length_x + neighbour.x  );
+
+                    }
+                    flow_map[neighbour.y , neighbour.x] = end_node_cost;
                 }
+
+            }
             }
         }
 
-        DebugUtils.Print2DArray(flow_map);
+        
         return flow_map;
 	}
 
