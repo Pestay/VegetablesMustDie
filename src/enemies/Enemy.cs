@@ -9,7 +9,9 @@ using System.Text;
 // Enemy for testing purposes
 public class Enemy : KinematicBody2D{
 
-    AnimationPlayer ANIMATIONS;
+
+    /* ESTADOS COMPARTIDOS */
+    public AnimationPlayer ANIMATIONS;
     AnimationPlayer EFFECTS;
     HealthBar HEALTH_BAR;
     EffectsManager EFFECTS_MANAGER;
@@ -30,11 +32,12 @@ public class Enemy : KinematicBody2D{
     public float spikeDmg;
     public float dotReload;
     public float lastDot;
+    
+    public bool has_obstacle = false;
+    public Vector2 obstacle_pos;
 
     [Signal]
     delegate void Dead(Enemy self);
-
-
 
     public override void _Ready(){
         enemy_sprite = GetNode<Sprite>("Sprite");
@@ -73,7 +76,7 @@ public class Enemy : KinematicBody2D{
     }
 
      // Constantly move linearly to the position
-    void MoveTo(float delta, Vector2 destination){
+    public void MoveTo(float delta, Vector2 destination){
         Vector2 to_pos = (destination - this.GlobalPosition).Normalized();
         Vector2 new_velocity = to_pos*max_speed;
         velocity = new_velocity;
@@ -83,14 +86,14 @@ public class Enemy : KinematicBody2D{
     }
 
     // --- Actions
-    struct EnvironmentObservation{
+    public struct EnvironmentObservation{
         public Vector2 global_pos;
         public int value;
         public bool is_obstacle;
     }
 
     // Return what the agent see in the current position
-    List<EnvironmentObservation> GetObservations(){
+    public List<EnvironmentObservation> GetObservations(){
         List<Map.Coord> neighbours = enviroment.GetNeighboursFromGlobal(this.GlobalPosition);
         List<EnvironmentObservation> observations = new List<EnvironmentObservation>();
         Map.Coord pivot = enviroment.GlobalToCoord(this.GlobalPosition);
@@ -106,35 +109,6 @@ public class Enemy : KinematicBody2D{
         
         return observations;
     }
-
-    EnvironmentObservation selected_cell;
-    public Vector2 current_destination = new Vector2(Int32.MaxValue, Int32.MaxValue);
-    // Moves to goal following the current flow field map
-    public void MoveToGoal(float delta){
-        // If is near to the destination
-        if(current_destination.DistanceSquaredTo(this.GlobalPosition) < 32){ // < 8*8 (1/4 of tile)
-            Vector2 next_pos = this.GlobalPosition;
-            int min_value = Int32.MaxValue;
-            EnvironmentObservation cell = new EnvironmentObservation();
-            List<EnvironmentObservation> observations = GetObservations();
-            
-            foreach(EnvironmentObservation observation in observations){
-                
-                if(observation.value < min_value){
-                    next_pos = observation.global_pos;
-                    min_value = observation.value;
-                    cell = observation;
-                }
-                
-            }
-            //
-            selected_cell = cell;
-            current_destination = next_pos;
-            
-        }
-        MoveTo(delta, current_destination);
-    }
-    
 
     // Follow a set of points
     public void FollowPath(float delta){
@@ -152,8 +126,7 @@ public class Enemy : KinematicBody2D{
     }
 
 
-    public bool SelectedCellIsObstacle() => selected_cell.is_obstacle;
-
+    public bool HasObstacle() => has_obstacle;
     // Animations
 
     public void IdleAnimation(){
@@ -162,20 +135,11 @@ public class Enemy : KinematicBody2D{
         enemy_sprite.Frame = 0;
     }
 
-    public void WalkAnimation(){
-        if(!ANIMATIONS.IsPlaying())
-            ANIMATIONS.Play("walk");
-    }
-
-    public void AttackAnimation(){
-        if(!ANIMATIONS.IsPlaying())
-            ANIMATIONS.Play("attack");
-    }
 
     // Enemy attack the current cell
     
     public WoodenBlock1x1 GetObstacle(){
-        Map.Coord coord = enviroment.GlobalToCoord(selected_cell.global_pos);
+        Map.Coord coord = enviroment.GlobalToCoord(obstacle_pos);
         return enviroment.GetObstacleAtCoord(coord);
     }
     

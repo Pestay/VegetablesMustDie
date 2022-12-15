@@ -11,7 +11,10 @@ public class EnemyFSM : Node
     }
 
     EnemyAttackState current_state_test;
+    EnemyWalkState walk_state;
+
     STATES current_state = STATES.NULL;
+    FSMState current_stated;
     Enemy parent;
 
 
@@ -40,12 +43,7 @@ public class EnemyFSM : Node
     protected virtual STATES GetTransitions(STATES state){ 
         switch(state){
             case STATES.WALK:
-                /*
-                if(parent.HasReachTarget()){
-                    return STATES.IDLE;
-                }
-                */
-                if(parent.SelectedCellIsObstacle()){
+                if(parent.HasObstacle()){
                     return STATES.ATTACK;
                 }
                 break;
@@ -55,8 +53,8 @@ public class EnemyFSM : Node
                 }
                 break;
             case STATES.ATTACK:
-                if(!parent.IsBlocked()){
-                    return STATES.IDLE;
+                if(!parent.HasObstacle()){
+                    return STATES.WALK;
                 }
                 break;
 
@@ -68,8 +66,10 @@ public class EnemyFSM : Node
     protected virtual void OnEnterState(STATES out_state, STATES in_state){
         switch(in_state){
             case STATES.WALK:
-                parent.current_destination = parent.GlobalPosition;
-                parent.WalkAnimation();
+                //parent.current_destination = parent.GlobalPosition;
+                //parent.WalkAnimation();
+                //GD.Print(" comenzandoo");
+                StartWalkState();
                 break;
             case STATES.IDLE:
                 parent.IdleAnimation();
@@ -83,8 +83,24 @@ public class EnemyFSM : Node
         }
     }
 
+    void StartWalkState(){
+        PackedScene scene = GD.Load<PackedScene>("res://src/enemies/enemy_states/EnemyWalkState.tscn");
+        walk_state = scene.Instance<EnemyWalkState>();
+        walk_state.Constructor(parent, parent.ANIMATIONS);
+        AddChild(walk_state);
+    }
+
+
     // What it does when it exits from a state
     protected virtual void OnExitState(STATES out_state, STATES in_state){
+        switch(out_state){
+            case STATES.WALK:
+                walk_state.RemoveState();
+                break;
+            case STATES.ATTACK:
+                current_state_test.RemoveState();
+                break;
+        }
     }
 
 
@@ -93,7 +109,7 @@ public class EnemyFSM : Node
         switch(state){
             case STATES.WALK:
                 //parent.FollowPath(delta);
-                parent.MoveToGoal(delta);
+                //parent.MoveToGoal(delta);
                 break;
             case STATES.ATTACK:
                 //GD.Print("ATTACK");

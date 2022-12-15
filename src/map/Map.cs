@@ -95,9 +95,14 @@ public class Map : Node2D{
     }
 
     public bool CoordIsObstacle(Coord coord){
+        if(wooden_obstacles.ContainsKey(map_matrix.GetLength(1)*coord.y + coord.x)){
+            return true;
+        }
+        /*
         if(map_matrix[coord.y, coord.x] >= 10 && !CoordIsWall(coord)){
             return true;            
         }
+        */
         return false;
     }
 
@@ -158,8 +163,16 @@ public class Map : Node2D{
         GD.Print(" NEW BLOCK");
         // Emit signal map update
         wooden_obstacles[( (int) tile_pos.y)*map_matrix.GetLength(1) + ( (int) tile_pos.x)] = block;
+        block.Connect("OnDestroy",this, "RemoveObstacle");
         EmitSignal(nameof(MapUpdate));
     }
+
+    public void RemoveObstacle(WoodenBlock1x1 obstacle){
+        Coord pos = GlobalToCoord(obstacle.GlobalPosition);
+        GD.Print("REMOVIEENDOO");
+        wooden_obstacles.Remove(pos.y*map_matrix.GetLength(1) + pos.x);
+    }
+
 
     public void SetFlowMap() {
         FLOW_MAP = PATH_FINDING.CreateDijkstraMap(TILE_MAP.WorldToMap(ENEMY_GOAL.GlobalPosition), map_matrix);

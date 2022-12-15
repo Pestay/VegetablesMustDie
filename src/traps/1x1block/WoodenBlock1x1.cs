@@ -8,6 +8,9 @@ public class WoodenBlock1x1 : Trap{
     float health = 200.0f;
     Sprite TABLE_SPRITE;
 
+    [Signal]
+    delegate void OnDestroy(WoodenBlock1x1 self);
+
     WoodenBlock1x1(){
         can_block = true;
         price = 100;
@@ -31,9 +34,12 @@ public class WoodenBlock1x1 : Trap{
         */
         if(health <= 0){
             GD.Print(" MESITA DESTRUIDA");
+            EmitSignal(nameof(OnDestroy), this);
             QueueFree();
         }
         
     }
+
+
 
 }
