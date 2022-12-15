@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class EffectsManager : Node2D{
     
-    public enum PROPERTY_TYPE{ // Wich propertie modifies
+    public enum PROPERTY_TYPE{ // Which propertie modifies
         Velocity,
         Health,
     }
@@ -60,6 +60,10 @@ public class EffectsManager : Node2D{
 
 
     public int ApplyEffectsForProperty(PROPERTY_TYPE type, int property){
+        return property;
+    }
+
+    public float ApplyEffectsForProperty(PROPERTY_TYPE type, float property){
         return property;
     }
     

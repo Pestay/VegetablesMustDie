@@ -1,0 +1,23 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/bubble_1.wav-fa6aaee037d4d0dbc8b00644143b01c6.sample"
+
+[deps]
+
+source_file="res://src/traps/turret/bubble_1.wav"
+dest_files=[ "res://.import/bubble_1.wav-fa6aaee037d4d0dbc8b00644143b01c6.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

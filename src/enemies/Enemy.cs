@@ -22,6 +22,11 @@ public class Enemy : KinematicBody2D{
     EnemyFSM brain;
     public Map enviroment;
 
+    public bool inSpike = false;
+    public float spikeDmg;
+    public float dotReload;
+    public float lastDot;
+
     [Signal]
     delegate void Dead(Enemy self);
 
@@ -52,6 +57,14 @@ public class Enemy : KinematicBody2D{
     public override void _PhysicsProcess(float delta){
         base._PhysicsProcess(delta);
         brain.UpdateFSM(delta);
+        if(inSpike) {
+            lastDot += delta;
+            if(lastDot >= dotReload)
+            {
+                TakeDamage(spikeDmg);
+                lastDot = 0.0f;
+            }
+        }
     }
 
      // Constantly move linearly to the position

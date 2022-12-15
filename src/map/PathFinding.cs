@@ -190,7 +190,7 @@ public class PathFinding : Node{
     }
 
 
-    private List<Vector2> Neighbours(Vector2 n, int[,] cells){
+    public List<Vector2> Neighbours(Vector2 n, int[,] cells){
         List<Vector2> temp = new List<Vector2>();
 
         int row = (int)n.y;
