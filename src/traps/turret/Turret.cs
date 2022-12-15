@@ -23,7 +23,7 @@ public class Turret : Trap{
     Turret(){
         can_block = false;
         only_wall = true;
-        price = 100;
+        price = 300;
     }
 
     public override void _PhysicsProcess(float delta)
