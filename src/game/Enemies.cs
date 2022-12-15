@@ -33,6 +33,7 @@ public class Enemies : Node2D{
             Enemy new_enemy = (Enemy) SpawnEnemy(initial_pos ,enemy);
             current_enemies.Add(new_enemy);
             new_enemy.Connect("Dead", this , nameof(_onEnemyDie));
+            new_enemy.Connect("Dead", GetNode<Traps>("../Traps") , "_OnEnemyDie");
             new_enemy.SetPath( GAME_MAP.GetPathToGoal(new_enemy.GlobalPosition) );
             await ToSignal(GetTree().CreateTimer(0.2f), "timeout");
         }

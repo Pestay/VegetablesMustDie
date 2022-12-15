@@ -24,7 +24,7 @@ public class Enemy : KinematicBody2D{
     public float damage = 20.0f;
     Sprite enemy_sprite;
     float health = 100;
-    int enemy_value = 100;
+    int enemy_value = 80;
     EnemyFSM brain;
     public Map enviroment;
 
@@ -168,13 +168,7 @@ public class Enemy : KinematicBody2D{
         HEALTH_BAR.SetValue(health);
         EFFECTS.Play("TakeDamage");
         if(health <= 0){
-            BloodSplatter blood_instance = (BloodSplatter)BLOOD_SPLATTER.Instance();
-            GetTree().CurrentScene.AddChild(blood_instance);
-            blood_instance.GlobalPosition = GlobalPosition;
-            Coin coin_instance = (Coin)COIN.Instance();
-            coin_instance.enemy_value = enemy_value.ToString();
-            GetTree().CurrentScene.AddChild(coin_instance);
-            coin_instance.GlobalPosition = GlobalPosition;
+
             Die();
         }
         
@@ -186,6 +180,14 @@ public class Enemy : KinematicBody2D{
     }
 
     public void Die(){
+        BloodSplatter blood_instance = (BloodSplatter)BLOOD_SPLATTER.Instance();
+        GetTree().CurrentScene.AddChild(blood_instance);
+        blood_instance.GlobalPosition = GlobalPosition;
+        Coin coin_instance = (Coin)COIN.Instance();
+        coin_instance.enemy_value = enemy_value.ToString();
+        GetTree().CurrentScene.AddChild(coin_instance);
+        coin_instance.GlobalPosition = GlobalPosition;
+
         EmitSignal(nameof(Dead), this);
         QueueFree();
     }
@@ -198,6 +200,6 @@ public class Enemy : KinematicBody2D{
         EFFECTS_MANAGER.RemovePropertyEffect(effect);
     }
 
-
+    public int GetReward() => enemy_value;
 }
 

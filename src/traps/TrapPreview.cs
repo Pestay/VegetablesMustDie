@@ -124,9 +124,8 @@ public class TrapPreview : Node2D{
 
     void PlaceNewTrap(){
         if(valid_position){
-            Trap new_trap = trap_scene.Instance<Trap>();
-            new_trap.GlobalPosition = GlobalPosition;
-            EmitSignal(nameof(PlaceTrap), GlobalPosition - new Vector2(16,16), new_trap, trap_rotation );
+            //new_trap.GlobalPosition = GlobalPosition;
+            EmitSignal(nameof(PlaceTrap), GlobalPosition - new Vector2(16,16), trap_scene, trap_rotation );
             //GetParent().AddChild(new_trap);
         }
     }
