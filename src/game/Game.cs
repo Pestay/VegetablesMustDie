@@ -33,7 +33,8 @@ public class Game : Node2D{
 
         MUSIC_CONTROLLER = GetNode<AudioStreamPlayer2D>("Music");
         MUSIC_CONTROLLER.Stream = GD.Load<AudioStream>("res://src/game/combat.mp3");
-        MUSIC_CONTROLLER.Play();
+        
+
         AUDIO_CONTROLLER = GetNode<AudioStreamPlayer2D>("AudioStreamPlayer2D");
         AUDIO_CONTROLLER.Stream = GD.Load<AudioStream>("res://src/game/Alarm_01.wav");
         
@@ -58,13 +59,13 @@ public class Game : Node2D{
         WaveStructs.Wave wave2 = new WaveStructs.Wave( new List<WaveStructs.Group>(){enemies21,enemies22,enemies23} );
         total_waves.Add(wave2);
 
-        //StartNextWave();
         StartTimeBetweenWaves();
         GAME_HUD.UpdateHP(health_points);
     }
 
     void StartNextWave(){
         if(total_waves.Count > 0){
+            MUSIC_CONTROLLER.Play();
             WaveStructs.Wave next_wave = total_waves[0];
             total_waves.RemoveAt(0);
             ENEMIES.StartWave(next_wave);
@@ -99,8 +100,14 @@ public class Game : Node2D{
     }
 
     void _on_Enemies_WaveFinished(){
-        //StartNextWave();
-        StartTimeBetweenWaves();
+        MUSIC_CONTROLLER.Stop();
+        
+        if(total_waves.Count <= 0){
+            if(!is_game_over)
+                Win();
+        }else{
+            StartTimeBetweenWaves();
+        }
         /*
         if(!is_game_over)
             Win();
