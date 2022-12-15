@@ -99,3 +99,5 @@ anims/walk = SubResource( 2 )
 anims/TakeDamage = SubResource( 4 )
 
 [node name="PathDebuger" parent="." instance=ExtResource( 5 )]
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]

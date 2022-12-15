@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/game-over-arcade-6435.mp3-7b028dd231ca5391cc52a54d2aca4823.mp3str"
+
+[deps]
+
+source_file="res://src/game/game-over-arcade-6435.mp3"
+dest_files=[ "res://.import/game-over-arcade-6435.mp3-7b028dd231ca5391cc52a54d2aca4823.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

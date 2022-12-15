@@ -17,6 +17,7 @@ public class Enemy : KinematicBody2D{
     EffectsManager EFFECTS_MANAGER;
     PackedScene BLOOD_SPLATTER;
     PackedScene COIN;
+    AudioStreamPlayer2D AUDIO_CONTROLLER;
     List<PathFindingCell> current_path = new List<PathFindingCell>();
     
     Vector2 velocity = Vector2.Zero;
@@ -49,6 +50,8 @@ public class Enemy : KinematicBody2D{
         HEALTH_BAR.SetMaxValue(health);
         COIN = GD.Load<PackedScene>("res://src/effects/Coin.tscn");
         BLOOD_SPLATTER = GD.Load<PackedScene>("res://src/effects/BloodSplatter.tscn");
+        AUDIO_CONTROLLER = GetNode<AudioStreamPlayer2D>("AudioStreamPlayer2D");
+        AUDIO_CONTROLLER.Stream = GD.Load<AudioStream>("res://src/enemies/plant_damage.wav");
         //Debug
         
     }
@@ -167,6 +170,7 @@ public class Enemy : KinematicBody2D{
         health -= dmg;
         HEALTH_BAR.SetValue(health);
         EFFECTS.Play("TakeDamage");
+        AUDIO_CONTROLLER.Play();
         if(health <= 0){
 
             Die();

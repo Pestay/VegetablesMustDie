@@ -3,8 +3,12 @@ using System;
 
 public class Menu : Control{
 
+    AudioStreamPlayer2D AUDIO_CONTROLLER;
+
     public override void _Ready(){
-        
+        AUDIO_CONTROLLER = GetNode<AudioStreamPlayer2D>("AudioStreamPlayer2D");
+        AUDIO_CONTROLLER.Stream = GD.Load<AudioStream>("res://src/main_menu/menu.mp3");
+        AUDIO_CONTROLLER.Play();
     }
 
     public void _OnPlayPressed(){
