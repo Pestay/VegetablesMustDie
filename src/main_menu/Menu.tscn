@@ -96,10 +96,36 @@ custom_styles/pressed = SubResource( 9 )
 custom_styles/normal = SubResource( 5 )
 text = "Play"
 
-[node name="Exit" type="Button" parent="VBoxContainer"]
+[node name="Instrucciones" type="Button" parent="VBoxContainer"]
 margin_top = 32.0
 margin_right = 583.0
 margin_bottom = 54.0
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_hover = Color( 5, 5, 5, 1 )
+custom_colors/font_color_pressed = Color( 0.411765, 0.411765, 0.411765, 1 )
+custom_fonts/font = ExtResource( 4 )
+custom_styles/hover = SubResource( 4 )
+custom_styles/pressed = SubResource( 9 )
+custom_styles/normal = SubResource( 5 )
+text = "Instrucciones"
+
+[node name="Assets" type="Button" parent="VBoxContainer"]
+margin_top = 64.0
+margin_right = 583.0
+margin_bottom = 86.0
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_hover = Color( 5, 5, 5, 1 )
+custom_colors/font_color_pressed = Color( 0.411765, 0.411765, 0.411765, 1 )
+custom_fonts/font = ExtResource( 4 )
+custom_styles/hover = SubResource( 4 )
+custom_styles/pressed = SubResource( 9 )
+custom_styles/normal = SubResource( 5 )
+text = "Assets"
+
+[node name="Exit" type="Button" parent="VBoxContainer"]
+margin_top = 96.0
+margin_right = 583.0
+margin_bottom = 118.0
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_colors/font_color_hover = Color( 5, 5, 5, 1 )
 custom_colors/font_color_pressed = Color( 0.411765, 0.411765, 0.411765, 1 )
@@ -202,5 +228,7 @@ text = "INSTRUCCIONES:
 ¡Evita que los enemigos lleguen a tu base!"
 
 [connection signal="pressed" from="VBoxContainer/Play" to="." method="_OnPlayPressed"]
+[connection signal="pressed" from="VBoxContainer/Instrucciones" to="." method="_on_Instrucciones_pressed"]
+[connection signal="pressed" from="VBoxContainer/Assets" to="." method="_on_Assets_pressed"]
 [connection signal="pressed" from="VBoxContainer/Exit" to="." method="_on_Exit_pressed"]
 [connection signal="confirmed" from="Instrucciones" to="." method="_on_Instrucciones_confirmed"]

@@ -16,16 +16,20 @@ public class Menu : Control{
     }
 
     public void _OnPlayPressed(){
-        Instrucciones.Popup_();
-        Assets.Popup_();
-    }
-
-    public void _on_Instrucciones_confirmed()
-    {
         GetTree().ChangeScene("res://src/game/Game.tscn");
     }
 
+
+
     public void _OnExitPressed(){
         GetTree().Quit();
+    }
+
+    public void _on_Instrucciones_pressed(){
+        Instrucciones.Popup_();
+    }
+
+    public void _on_Assets_pressed(){
+        Assets.Popup_();
     }
 }
