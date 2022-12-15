@@ -118,17 +118,6 @@ rect_pivot_offset = Vector2( 52, 15 )
 custom_fonts/mono_font = SubResource( 1 )
 text = "Paralelo 1"
 
-[node name="Assets" type="RichTextLabel" parent="."]
-margin_left = 19.0
-margin_top = 449.0
-margin_right = 248.0
-margin_bottom = 519.0
-rect_pivot_offset = Vector2( 52, 15 )
-custom_fonts/mono_font = SubResource( 1 )
-text = "Assets usados:
-2D Pixel Art Vegetable Monsters Sprite Pack
-"
-
 [node name="Creadores" type="RichTextLabel" parent="."]
 margin_left = 18.0
 margin_top = 357.0
@@ -168,5 +157,50 @@ text = "Vegetables must die"
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 autoplay = true
 
+[node name="Assets" type="WindowDialog" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 23.0
+margin_top = 36.0
+margin_right = -36.0
+margin_bottom = -64.0
+
+[node name="Assets" type="RichTextLabel" parent="Assets"]
+margin_left = 256.0
+margin_top = 91.0
+margin_right = 939.0
+margin_bottom = 445.0
+rect_scale = Vector2( 2, 2 )
+rect_pivot_offset = Vector2( 52, 15 )
+custom_fonts/mono_font = SubResource( 1 )
+text = "Assets usados:
+- 2D Pixel Art Vegetable Monsters Sprite Pack
+- Free Retro SFX por inertsongs
+- Minifantasy - Dungeon Audio Pack - Leohpaz
+- Musica Ian Taylor"
+
+[node name="Instrucciones" type="AcceptDialog" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 70.0
+margin_top = 105.0
+margin_right = -77.0
+margin_bottom = -71.0
+
+[node name="Instrucciones" type="RichTextLabel" parent="Instrucciones"]
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 869.0
+margin_bottom = 388.0
+rect_scale = Vector2( 2, 2 )
+text = "INSTRUCCIONES:
+
+- Click izquierdo para disparar
+- Flechas para moverse
+- B para empezar a construir
+
+¡Evita que los enemigos lleguen a tu base!"
+
 [connection signal="pressed" from="VBoxContainer/Play" to="." method="_OnPlayPressed"]
 [connection signal="pressed" from="VBoxContainer/Exit" to="." method="_on_Exit_pressed"]
+[connection signal="confirmed" from="Instrucciones" to="." method="_on_Instrucciones_confirmed"]
