@@ -117,8 +117,10 @@ texture = ExtResource( 9 )
 expand = true
 
 [node name="Traps" parent="." instance=ExtResource( 7 )]
+z_index = 1
 
 [node name="Enemies" type="Node2D" parent="."]
+z_index = 1
 script = ExtResource( 2 )
 
 [node name="FreeViewCamera" parent="." instance=ExtResource( 5 )]
@@ -129,6 +131,7 @@ script = ExtResource( 6 )
 
 [node name="Player" parent="." instance=ExtResource( 11 )]
 position = Vector2( 463, 79 )
+z_index = 1
 speed = 100
 
 [connection signal="EnemyReachGoal" from="Map" to="." method="_on_Map_EnemyReachGoal"]
