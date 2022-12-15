@@ -9,6 +9,10 @@ public class DetergentFloor : Trap{
 
     Dictionary<Enemy, SlowDownEffect> effect_by_enemy = new Dictionary<Enemy, SlowDownEffect>();
 
+    DetergentFloor(){
+        price = 50;
+    }
+
     public override void _Ready(){
         effect = ResourceLoader.Load<PackedScene>("res://src/effects/SlowDownEffect.tscn");
     }

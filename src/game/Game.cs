@@ -93,7 +93,7 @@ public class Game : Node2D{
 
     void StartTimeBetweenWaves(){
 
-        time_left = 20;
+        time_left = 5;
         TIMER_BETWEEN_WAVES.Start();
         
         
