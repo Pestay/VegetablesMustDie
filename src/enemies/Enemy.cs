@@ -17,6 +17,7 @@ public class Enemy : KinematicBody2D{
     
     Vector2 velocity = Vector2.Zero;
     float max_speed = 50;
+    public float damage = 20.0f;
     Sprite enemy_sprite;
     float health = 100;
     EnemyFSM brain;
@@ -110,6 +111,7 @@ public class Enemy : KinematicBody2D{
         if(current_destination.DistanceSquaredTo(this.GlobalPosition) < 32){ // < 8*8 (1/4 of tile)
             Vector2 next_pos = this.GlobalPosition;
             int min_value = Int32.MaxValue;
+            EnvironmentObservation cell = new EnvironmentObservation();
             List<EnvironmentObservation> observations = GetObservations();
             
             foreach(EnvironmentObservation observation in observations){
@@ -117,10 +119,12 @@ public class Enemy : KinematicBody2D{
                 if(observation.value < min_value){
                     next_pos = observation.global_pos;
                     min_value = observation.value;
+                    cell = observation;
                 }
                 
             }
             //
+            selected_cell = cell;
             current_destination = next_pos;
             
         }
@@ -163,11 +167,17 @@ public class Enemy : KinematicBody2D{
         if(!ANIMATIONS.IsPlaying())
             ANIMATIONS.Play("attack");
     }
+
+    // Enemy attack the current cell
+    
+    public WoodenBlock1x1 GetObstacle(){
+        Map.Coord coord = enviroment.GlobalToCoord(selected_cell.global_pos);
+        return enviroment.GetObstacleAtCoord(coord);
+    }
     
 
     // --- Checkers (Transitions)
     public bool HasReachTarget(){
-        return false;
         if(current_path.Count <= 0){
             return true;
         }

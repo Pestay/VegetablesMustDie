@@ -18,7 +18,7 @@ public class Map : Node2D{
     public TileMap TILE_MAP;
     Area2D ENEMY_GOAL;
     Dictionary<int, Vector2> ENEMIES_GATES = new Dictionary<int, Vector2>();
-
+    Dictionary<int, WoodenBlock1x1> wooden_obstacles = new Dictionary<int, WoodenBlock1x1>();
     Dictionary<Vector2, FlowMapCell> FLOW_MAP;
 
     Position2D PLAYER_SPAWN;
@@ -102,6 +102,11 @@ public class Map : Node2D{
     }
 
 
+    public WoodenBlock1x1 GetObstacleAtCoord(Coord coord){
+        return wooden_obstacles[map_matrix.GetLength(1)*coord.y + coord.x];
+    }
+
+
     public Coord GetGoalCoord(){
         Vector2 pos = TILE_MAP.WorldToMap(ENEMY_GOAL.GlobalPosition);
         Coord coord = new Coord(){ x = (int) pos.x, y = (int)  pos.y };
@@ -147,11 +152,12 @@ public class Map : Node2D{
     
 
     // Add a trap to map matrix
-    public void SetNewBlock(Vector2 tile_pos, int block_weight){
+    public void SetNewBlock(Vector2 tile_pos, WoodenBlock1x1 block){
         map_matrix[(int) tile_pos.y, (int) tile_pos.x] = 50; // ENCONTRAR UN PESO RELATIVO AL TAMANO DEL MAPA
         flow_field = GenerateFlowField(this);
         GD.Print(" NEW BLOCK");
         // Emit signal map update
+        wooden_obstacles[( (int) tile_pos.y)*map_matrix.GetLength(1) + ( (int) tile_pos.x)] = block;
         EmitSignal(nameof(MapUpdate));
     }
 

@@ -10,8 +10,12 @@ public class EnemyFSM : Node
         ATTACK
     }
 
+    EnemyAttackState current_state_test;
     STATES current_state = STATES.NULL;
     Enemy parent;
+
+
+
     public override void _Ready(){
         InitializeFSM();
         current_state = STATES.IDLE;
@@ -36,10 +40,12 @@ public class EnemyFSM : Node
     protected virtual STATES GetTransitions(STATES state){ 
         switch(state){
             case STATES.WALK:
+                /*
                 if(parent.HasReachTarget()){
                     return STATES.IDLE;
                 }
-                if(parent.IsBlocked()){
+                */
+                if(parent.SelectedCellIsObstacle()){
                     return STATES.ATTACK;
                 }
                 break;
@@ -47,7 +53,6 @@ public class EnemyFSM : Node
                 if(!parent.HasReachTarget()){
                     return STATES.WALK;
                 }
-                
                 break;
             case STATES.ATTACK:
                 if(!parent.IsBlocked()){
@@ -63,12 +68,17 @@ public class EnemyFSM : Node
     protected virtual void OnEnterState(STATES out_state, STATES in_state){
         switch(in_state){
             case STATES.WALK:
-                
                 parent.current_destination = parent.GlobalPosition;
                 parent.WalkAnimation();
                 break;
             case STATES.IDLE:
                 parent.IdleAnimation();
+                break;
+            case STATES.ATTACK:
+                PackedScene scene = GD.Load<PackedScene>("res://src/enemies/enemy_states/EnemyAttackState.tscn");
+                current_state_test = scene.Instance<EnemyAttackState>();
+                current_state_test.Constructor(parent, parent.GetObstacle());
+                AddChild(current_state_test);
                 break;
         }
     }
@@ -85,7 +95,15 @@ public class EnemyFSM : Node
                 //parent.FollowPath(delta);
                 parent.MoveToGoal(delta);
                 break;
+            case STATES.ATTACK:
+                //GD.Print("ATTACK");
+                //if(IsInstanceValid(current_state_test))
+                //current_state_test.RunStatex(delta);
+                break;
         }
     }
+
+
+
 
 }

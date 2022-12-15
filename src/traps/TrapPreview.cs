@@ -111,7 +111,7 @@ public class TrapPreview : Node2D{
 
     public void _OnArea2DBodyEntered(Node body){
         objects_detected += 1;
-        GD.Print(body);
+        //GD.Print(body);
         if(body.IsInGroup("Turret")) {
             turret_in_the_way = true;
         }

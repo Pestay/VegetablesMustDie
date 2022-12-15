@@ -87,7 +87,7 @@ public class Traps : Node2D{
         trap.RotationDegrees = rotation;
         AddChild(trap);
         if(trap.CanBlock()){
-            MAP.SetNewBlock(MAP.GetTileMap().WorldToMap( place_pos ), 10);
+            MAP.SetNewBlock(MAP.GetTileMap().WorldToMap( place_pos ), (WoodenBlock1x1) trap );
         }
 
 
