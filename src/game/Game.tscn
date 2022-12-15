@@ -25,6 +25,10 @@ script = ExtResource( 12 )
 [node name="Hud" type="Control" parent="GameHud"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = -48.0
+margin_top = -144.0
+margin_right = -48.0
+margin_bottom = -144.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="GameHud/Hud"]
 anchor_left = 1.0

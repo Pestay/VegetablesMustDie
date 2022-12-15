@@ -19,8 +19,9 @@ public class Enemies : Node2D{
         GAME_MAP = game_map;
     }
 
-    Node2D SpawnEnemy(Vector2 spawn_pos, PackedScene enemy){
-        Node2D new_enemy = enemy.Instance<Node2D>();
+    Enemy SpawnEnemy(Vector2 spawn_pos, PackedScene enemy){
+        Enemy new_enemy = enemy.Instance<Enemy>();
+        new_enemy.enviroment = GAME_MAP;
         new_enemy.GlobalPosition = spawn_pos;
         AddChild(new_enemy); // < BUG!
         return new_enemy;

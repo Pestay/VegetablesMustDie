@@ -11,8 +11,9 @@ public class DebugUtils : Node2D{
 
             for (int j = 0; j < matrix.GetLength(1); j++)
             {
-                buffer += matrix[i,j].ToString();
+                buffer += $"{matrix[i, j], -5}";
                 buffer += ",";
+                
             }
 
             GD.Print(buffer);
