@@ -6,6 +6,8 @@ using System.Linq;
 // Establece el entorno del juego y entrega informacion sobre el entorno
 public class Map : Node2D{
 
+    const int WALL_COST = 9999;
+
     public struct Coord{
         public int x;
         public int y;
@@ -75,7 +77,7 @@ public class Map : Node2D{
             int y = (int) (tile_cell.y - map_offset.y);
             int cell_id = TILE_MAP.GetCell((int) tile_cell.x,(int) tile_cell.y);
             if(cell_id == 0){
-                map_array[y,x] = 9999;
+                map_array[y,x] = WALL_COST;
             }else{
                 map_array[y,x] = 1;
             }
@@ -88,7 +90,17 @@ public class Map : Node2D{
     public int[,] GetMatrixMap() => map_matrix;
 
     public bool CoordIsWall(Coord coord){
-        if(map_matrix[coord.y,coord.x] == 0){
+
+        // Check if pos is within the limits
+        if( !(coord.x > 0 && (coord.x < map_matrix.GetLength(1))) ){
+            return false;
+        }
+        if( !(coord.y > 0 && (coord.y < map_matrix.GetLength(0)) )){
+            return false;
+        }
+
+
+        if(map_matrix[coord.y,coord.x] == WALL_COST){
             return true;
         }
         return false;
@@ -253,7 +265,7 @@ public class Map : Node2D{
         int[,] flow_map = new int[length_y,length_x];
         for(int y = 0; y < length_y; y++){
             for(int x = 0; x < length_x; x++){
-                flow_map[y,x] =  9999;
+                flow_map[y,x] =  WALL_COST;
             }
         }
 
@@ -283,7 +295,7 @@ public class Map : Node2D{
             List<Coord> neighbours = map.GetNeighbours(current_node_x, current_node_y);
             foreach( Map.Coord neighbour in neighbours){
                 // If the neighbour is not a wall
-                if(map_matrix[neighbour.y, neighbour.x] < 9999){
+                if(map_matrix[neighbour.y, neighbour.x] < WALL_COST){
 
                 int end_node_cost = flow_map[current_node_y, current_node_x] + map_matrix[neighbour.y, neighbour.x];
                 if((end_node_cost < flow_map[neighbour.y, neighbour.x])  ){
@@ -301,5 +313,6 @@ public class Map : Node2D{
         
         return flow_map;
 	}
+
 
 }

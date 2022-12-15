@@ -12,16 +12,18 @@ public class Traps : Node2D{
 
     // Nodes
     Map MAP;
+    GameHud HUD;
 
     TrapPreview current_trap = null;
     public bool in_building = false;
 
-    int current_money = 5000;
+    int current_money = 2000;
 
 
     public override void _Ready(){
         TRAP_PREVIEW = (PackedScene)ResourceLoader.Load("res://src/traps/TrapPreview.tscn");
-        
+        HUD = GetNode<GameHud>("../GameHud");
+        HUD.UpdateMoney(current_money);
         MAP = GetNode<Map>("../Map");
     }
 
@@ -82,17 +84,24 @@ public class Traps : Node2D{
     }
 
 
-    public void _OnPlaceTrap(Vector2 place_pos , Trap trap, float rotation){
-        trap.GlobalPosition = place_pos;
-        trap.RotationDegrees = rotation;
-        AddChild(trap);
-        if(trap.CanBlock()){
-            MAP.SetNewBlock(MAP.GetTileMap().WorldToMap( place_pos ), (WoodenBlock1x1) trap );
+    public void _OnPlaceTrap(Vector2 place_pos , PackedScene trap_scene, float rotation){
+        Trap new_trap = trap_scene.Instance<Trap>();
+        int price = new_trap.GetPrice();
+        if(current_money - price > 0){
+            current_money -= price;
+            HUD.UpdateMoney(current_money);
+
+            new_trap.GlobalPosition = place_pos;
+            new_trap.RotationDegrees = rotation;
+            AddChild(new_trap);
+            if(new_trap.CanBlock()){
+                MAP.SetNewBlock(MAP.GetTileMap().WorldToMap( place_pos ), (WoodenBlock1x1) new_trap );
+            }
         }
-
-
+        else{
+            new_trap.QueueFree();
+        }
     }
-
 
 
     void _on_Detergent_pressed(){
@@ -112,6 +121,12 @@ public class Traps : Node2D{
 
     void _on_Spikes_pressed(){
         CreateTrapPreview("Spikes");
+    }
+
+
+    public void _OnEnemyDie(Enemy enemy){
+        current_money += enemy.GetReward();
+        HUD.UpdateMoney(current_money);
     }
 
 }

@@ -15,7 +15,7 @@ public class WoodenBlock1x1 : Trap{
 
     WoodenBlock1x1(){
         can_block = true;
-        price = 100;
+        price = 200;
     }
 
     public override void _Ready(){
@@ -29,15 +29,16 @@ public class WoodenBlock1x1 : Trap{
     public void TakeDamage(float dmg){
         
         health -= dmg;
-        /*
+        
         if(health <= 0.2*MAX_HEALTH){
             TABLE_SPRITE.Frame = 2;
         }
         else if(health <= 0.5*MAX_HEALTH){
             TABLE_SPRITE.Frame = 1;
         }
-        */
+
         AUDIO_CONTROLLER.Play();
+
         if(health <= 0){
             GD.Print(" MESITA DESTRUIDA");
             EmitSignal(nameof(OnDestroy), this);

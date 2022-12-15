@@ -6,7 +6,6 @@
 script = ExtResource( 2 )
 
 [node name="BuildingMenu" type="CanvasLayer" parent="."]
-visible = false
 
 [node name="Control" type="Control" parent="BuildingMenu"]
 anchor_right = 1.0
@@ -17,33 +16,36 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-margin_left = -132.0
+margin_left = -306.0
 margin_top = -67.0
-margin_right = 132.0
+margin_right = 306.0
 
 [node name="Detergent" type="Button" parent="BuildingMenu/Control/HBoxContainer"]
-margin_right = 76.0
+margin_right = 150.0
 margin_bottom = 67.0
-rect_min_size = Vector2( 64, 64 )
-text = "Detergent"
+rect_min_size = Vector2( 150, 64 )
+text = "Detergent ($50)"
 
 [node name="Table" type="Button" parent="BuildingMenu/Control/HBoxContainer"]
-margin_left = 80.0
-margin_right = 144.0
+margin_left = 154.0
+margin_right = 304.0
 margin_bottom = 67.0
-rect_min_size = Vector2( 64, 64 )
-text = "Table"
+rect_min_size = Vector2( 150, 64 )
+text = "Table ($200)"
 
 [node name="Turret" type="Button" parent="BuildingMenu/Control/HBoxContainer"]
-margin_left = 148.0
-margin_right = 198.0
+margin_left = 308.0
+margin_right = 458.0
 margin_bottom = 67.0
-text = "Turret"
+rect_min_size = Vector2( 150, 0 )
+text = "Turret ($300)"
 
 [node name="Spikes" type="Button" parent="BuildingMenu/Control/HBoxContainer"]
-margin_right = 12.0
-margin_bottom = 20.0
-text = "Spikes"
+margin_left = 462.0
+margin_right = 612.0
+margin_bottom = 67.0
+rect_min_size = Vector2( 150, 0 )
+text = "Spikes ($50)"
 
 [connection signal="pressed" from="BuildingMenu/Control/HBoxContainer/Detergent" to="." method="_on_Detergent_pressed"]
 [connection signal="pressed" from="BuildingMenu/Control/HBoxContainer/Table" to="." method="_on_Table_pressed"]
